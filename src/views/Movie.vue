@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Hero :details="movie" :type="'movie'" />
+    <Hero :details="movie" :type="'movie'" v-if="!isEmpty(movie)" />
     <div class="row mt-4">
       <div class="col-md-9">
         <h4 class="mb-3">Casts</h4>
@@ -48,6 +48,9 @@ export default {
       tmdbMovies.get(id).then(response => {
         this.movie = response;
       });
+    },
+    isEmpty(obj) {
+      return Object.keys(obj).length === 0;
     }
   },
   computed: {

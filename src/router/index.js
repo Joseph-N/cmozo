@@ -73,8 +73,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
   /* https://router.vuejs.org/guide/advanced/scroll-behavior.html#async-scrolling */
-  scrollBehavior(to, from, savedPosition) {
-    console.log(savedPosition);
+  scrollBehavior(/*to, from, savedPosition*/) {
     return { x: 0, y: 0 };
   }
 });

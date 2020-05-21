@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Hero :details="show" :type="'tvshow'" />
+    <Hero :details="show" :type="'tvshow'" v-if="!isEmpty(show)" />
     <div class="row mt-4">
       <div class="col-md-9">
         <h4 class="mb-3">Series Casts</h4>
@@ -47,6 +47,9 @@ export default {
       tmdbTV.get(id).then(response => {
         this.show = response;
       });
+    },
+    isEmpty(obj) {
+      return Object.keys(obj).length === 0;
     }
   },
   computed: {

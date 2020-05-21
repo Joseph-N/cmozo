@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-image d-flex" :style="styleOptions(details.backdrop_path)">
+  <div class="hero-image d-flex" :style="styleObject">
     <div class="poster">
       <img :src="posterPath('w342', details.poster_path)" class="rounded img-fluid" />
     </div>
@@ -16,7 +16,7 @@
       </h1>
       <h1 v-else>{{ details.title }}</h1>
       <div class="facts">
-        <span class="certification" v-if="type =='tvshow'">
+        <span class="certification" v-if="type =='tvshow' && certification">
           <strong>{{ certification.rating }}</strong>
         </span>
         <span>
@@ -72,7 +72,10 @@ export default {
   props: ['details', 'type'],
   data() {
     return {
-      colors: []
+      colors: [],
+      styleObject: {
+        'background-image': 'linear-gradient(to bottom right, rgb(0, 0, 0,1), rgb(0, 0, 0,0.5))'
+      }
     };
   },
   created() {
@@ -101,7 +104,6 @@ export default {
       return `${hours}h ${minutes}m`;
     },
     certification() {
-      if (this.type != 'tvshow') return '';
       const results = this.details.content_ratings.results;
       if (!results.length) return '';
       const certification = results.filter(result => {
@@ -131,7 +133,8 @@ export default {
       if (!path) return 'https://via.placeholder.com/185x278';
       return `https://image.tmdb.org/t/p/${size}${path}`;
     },
-    styleOptions(path) {
+    backgroundImg() {
+      const path = this.details.backdrop_path;
       const url = `https://image.tmdb.org/t/p/original${path}`;
       const color = this.colors[2];
       const rgb = `${color[0]},${color[1]},${color[2]}`;
@@ -150,6 +153,7 @@ export default {
             imageColors.push(palette[color].getRgb());
           }
           this.colors = imageColors;
+          this.styleObject = this.backgroundImg();
         });
     }
   }
@@ -157,7 +161,7 @@ export default {
 </script>
 <style scoped>
 .hero-image {
-  height: 490px; /* You must set a specified height */
+  min-height: 490px; /* You must set a specified height */
   background-position: top center; /* Center the image */
   background-repeat: no-repeat; /* Do not repeat the image */
   background-size: cover; /* Resize the background image to cover the entire container */
