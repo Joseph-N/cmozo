@@ -1,14 +1,19 @@
 <template>
-  <div class="search w-50">
+  <div class="input-group w-50">
     <input
-      class="form-control form-control-dark typeahead"
-      name="q"
       type="text"
+      name="q"
       autocomplete="off"
       v-model.trim="q"
+      class="form-control form-control-dark typeahead"
       placeholder="Search Movies, TV Shows, People"
       @keyup.enter="gotoSearch"
     />
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" v-on:click="gotoSearch">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -19,12 +24,14 @@ export default {
   name: 'SearchForm',
   data() {
     return {
-      q: ''
+      q: '',
+      searching: false
     };
   },
   methods: {
     gotoSearch() {
       if (!this.q.length) return;
+      console.log('Enter clicked');
       // let slug = slugify(this.q);
       this.$router.push({ path: 'search', query: { q: this.q } });
     },
@@ -37,6 +44,12 @@ export default {
         vm.q = suggestion.title;
         document.activeElement.blur();
         vm.$router.push({ name: suggestion.type, params: { id: suggestion.id } });
+      });
+      inputEl.on('typeahead:asyncrequest', function() {
+        vm.searching = true;
+      });
+      inputEl.on('typeahead:asynccancel typeahead:asyncreceive', function() {
+        vm.searching = false;
       });
     }
   },
@@ -62,9 +75,15 @@ export default {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
+button.btn-outline-secondary {
+  border-color: #484d53;
+}
 </style>
 <style>
 /* custom */
+span.twitter-typeahead {
+  flex: 1;
+}
 span.twitter-typeahead .tt-suggestion h5 {
   font-size: 15px;
   margin-bottom: 0px;
@@ -170,7 +189,7 @@ span.twitter-typeahead {
 }
 .input-group span.twitter-typeahead .tt-menu,
 .input-group span.twitter-typeahead .tt-dropdown-menu {
-  top: 32px !important;
+  top: 40px !important;
 }
 .input-group span.twitter-typeahead:not(:first-child):not(:last-child) .form-control {
   border-radius: 0;

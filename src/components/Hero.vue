@@ -130,7 +130,7 @@ export default {
       return str.split(' ').join('-');
     },
     posterPath(size, path) {
-      if (!path) return 'https://via.placeholder.com/185x278';
+      if (!path) return 'https://via.placeholder.com/342x514';
       return `https://image.tmdb.org/t/p/${size}${path}`;
     },
     backgroundImg() {
@@ -138,13 +138,21 @@ export default {
       const url = `https://image.tmdb.org/t/p/original${path}`;
       const color = this.colors[2];
       const rgb = `${color[0]},${color[1]},${color[2]}`;
-      return {
-        'background-image':
-          'linear-gradient(to bottom right, rgba(' + rgb + ', 1), rgba(' + rgb + ', 0.5)), url("' + url + '")'
-      };
+
+      if (path) {
+        return {
+          'background-image': `linear-gradient(to bottom right, rgba(${rgb}, 1), rgba(${rgb}, 0.5)), url("${url}")`
+        };
+      } else {
+        return {
+          'background-image': `linear-gradient(to bottom right, rgba(${rgb}, 1), rgba(${rgb}, 0.5))`
+        };
+      }
     },
     getPalette() {
-      Vibrant.from(`https://image.tmdb.org/t/p/w342${this.details.poster_path}`)
+      const imagePATH = this.details.poster_path;
+      if (!imagePATH) return;
+      Vibrant.from(`https://image.tmdb.org/t/p/w342${imagePATH}`)
         .maxColorCount(200)
         .getPalette()
         .then(palette => {

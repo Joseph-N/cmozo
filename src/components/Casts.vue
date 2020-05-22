@@ -1,6 +1,6 @@
 <template>
   <div class="casts" v-if="casts">
-    <div class="card" v-for="cast in casts" :key="cast.id">
+    <div class="card" v-for="cast in sortedCast" :key="cast.id">
       <div class="poster" style="/*height: 180px;overflow-y: hidden;*/">
         <img :src="moviePoster('w92', cast.profile_path)" class="card-img-top" />
       </div>
@@ -16,17 +16,20 @@
 export default {
   name: 'Casts',
   props: ['casts'],
-  created() {
-    // this.sorted = this.casts.sort((a, b) => {
-    //   if (a.profile_path === b.profile_path) return 0;
-    //   if (a.profile_path === null) return 1;
-    //   if (b.profile_path === null) return -1;
-    // });
-  },
   methods: {
     moviePoster(size, path) {
       if (!path) return 'https://via.placeholder.com/185x278';
       return `https://image.tmdb.org/t/p/w500/${path}`;
+    }
+  },
+  computed: {
+    sortedCast() {
+      // concat so we don't modify the original array
+      return this.casts.concat().sort((a, b) => {
+        if (a.profile_path === b.profile_path) return 0;
+        if (a.profile_path === null) return 1;
+        if (b.profile_path === null) return -1;
+      });
     }
   }
 };

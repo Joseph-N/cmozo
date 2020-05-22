@@ -6,7 +6,7 @@ const typeAhead = {
   init: inputEl => {
     inputEl.typeahead(
       {
-        minLength: 3,
+        minLength: 2,
         highlight: true,
         hint: true
       },
@@ -15,7 +15,7 @@ const typeAhead = {
         limit: 5,
         displayKey: 'title',
         templates: {
-          header: '<legend>Movies</legend>',
+          header: '<legend class="text-muted">Movies</legend>',
           suggestion: typeAhead.suggestionTemplate
         }
       },
@@ -24,7 +24,7 @@ const typeAhead = {
         limit: 5,
         displayKey: 'title',
         templates: {
-          header: '<legend>TV Shows</legend>',
+          header: '<legend class="text-muted">TV Shows</legend>',
           suggestion: typeAhead.suggestionTemplate
         }
       }

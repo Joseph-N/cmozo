@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     getMovies() {
-      tmdbMovies.moviesByGenre(this.$route.params.id).then(response => (this.results = response.results));
+      tmdbMovies.byGenre(this.$route.params.id).then(response => (this.results = response.results));
     }
   },
   computed: {
