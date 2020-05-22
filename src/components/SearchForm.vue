@@ -1,5 +1,11 @@
 <template>
   <div class="input-group w-50">
+    <div class="loading" v-if="searching">
+      <div class="rect1"></div>
+      <div class="rect2"></div>
+      <div class="rect3"></div>
+      <div class="rect4"></div>
+    </div>
     <input
       type="text"
       name="q"
@@ -63,6 +69,7 @@ export default {
   padding: 0.75rem 1rem;
   border-width: 0;
   border-radius: 0;
+  padding-right: 70px;
 }
 
 .form-control-dark {
@@ -77,6 +84,75 @@ export default {
 }
 button.btn-outline-secondary {
   border-color: #484d53;
+}
+.loading-border {
+  position: absolute;
+  right: 45px;
+  display: flex;
+  align-items: center;
+}
+.loading {
+  position: absolute;
+  right: 45px;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.loading > div {
+  background-color: rgb(204, 204, 204);
+  height: 100%;
+  width: 6px;
+  margin-left: 2px;
+  display: inline-block;
+
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.loading .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.loading .rect3 {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+
+.loading .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.loading .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%,
+  40%,
+  100% {
+    -webkit-transform: scaleY(0.3);
+  }
+  20% {
+    -webkit-transform: scaleY(0.5);
+  }
+}
+
+@keyframes sk-stretchdelay {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.3);
+    -webkit-transform: scaleY(0.3);
+  }
+  20% {
+    transform: scaleY(0.5);
+    -webkit-transform: scaleY(0.5);
+  }
 }
 </style>
 <style>

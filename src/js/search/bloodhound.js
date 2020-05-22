@@ -36,7 +36,7 @@ const moviesEngine = new Bloodhound({
     return o.id;
   },
   remote: {
-    url: `https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_API_KEY}&query=%QUERY`,
+    url: `https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_API_KEY}&language=en-US&query=%QUERY`,
     wildcard: '%QUERY',
     filter: filterMovies
   }
@@ -52,7 +52,7 @@ const tvShowsEngine = new Bloodhound({
     return o.id;
   },
   remote: {
-    url: `https://api.themoviedb.org/3/search/tv?api_key=${process.env.VUE_APP_API_KEY}&query=%QUERY`,
+    url: `https://api.themoviedb.org/3/search/tv?api_key=${process.env.VUE_APP_API_KEY}&language=en-US&query=%QUERY`,
     wildcard: '%QUERY',
     filter: filterShows
   }
