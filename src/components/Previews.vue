@@ -2,19 +2,21 @@
   <div class="row">
     <div class="card" v-for="item in collection" :key="item.id">
       <router-link :to="{ name: type, params: { id: item.id } }">
-        <img :src="posterPath(item.poster_path)" class="card-img-top" />
+        <img :src="imagePath('w342', item.poster_path)" class="card-img-top" />
       </router-link>
     </div>
   </div>
 </template>
 
 <script>
+import { urlHelpers } from '../js/lib';
+
 export default {
   name: 'Previews',
   props: ['collection', 'type'],
   methods: {
-    posterPath(path) {
-      return `https://image.tmdb.org/t/p/w342${path}`;
+    imagePath(size, path) {
+      return urlHelpers.tmdbUrl(size, path);
     }
   }
 };

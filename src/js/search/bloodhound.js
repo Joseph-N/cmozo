@@ -1,4 +1,5 @@
 import Bloodhound from 'typeahead.js/dist/bloodhound';
+import { urlHelpers } from '../lib';
 
 const filterMovies = response => {
   return response.results.map(movie => {
@@ -8,7 +9,7 @@ const filterMovies = response => {
       type: 'Movie',
       overview: movie.overview,
       year: movie.release_date.split('-')[0],
-      poster: movie.poster_path ? `https://image.tmdb.org/t/p/w92${movie.poster_path}` : 'https://placehold.it/92x138'
+      poster: movie.poster_path ? urlHelpers.tmdbUrl('w92', movie.poster_path) : 'https://placehold.it/92x138'
     };
   });
 };
@@ -21,7 +22,7 @@ const filterShows = response => {
       type: 'TV',
       overview: show.overview,
       year: show.first_air_date ? show.first_air_date.split('-')[0] : '-',
-      poster: show.poster_path ? `https://image.tmdb.org/t/p/w92${show.poster_path}` : 'https://placehold.it/92x138'
+      poster: show.poster_path ? urlHelpers.tmdbUrl('w92', show.poster_path) : 'https://placehold.it/92x138'
     };
   });
 };

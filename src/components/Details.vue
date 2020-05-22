@@ -16,19 +16,19 @@
       <strong>Network</strong>
       <br />
       <span v-for="network in facts.networks" :key="network.id" class="mr-3">
-        <img :src="posterPath('w92', network.logo_path)" width="50px" />
+        <img :src="imagePath('w92', network.logo_path)" width="50px" />
       </span>
     </p>
 
     <p v-if="facts.first_air_date">
       <strong>First Aired</strong>
       <br />
-      {{ facts.first_air_date }}
+      {{ facts.first_air_date | formatDate }}
     </p>
     <p v-if="facts.last_air_date">
       <strong>Last Aired</strong>
       <br />
-      {{ facts.last_air_date }}
+      {{ facts.last_air_date | formatDate }}
     </p>
 
     <p v-if="facts.original_language">
@@ -59,24 +59,23 @@
   </div>
 </template>
 <script>
+import { urlHelpers, numberHelpers, dateHelpers } from '../js/lib';
+
 export default {
   name: 'Details',
   props: ['facts'],
   methods: {
-    posterPath(size, path) {
+    imagePath(size, path) {
       if (!path) return 'https://via.placeholder.com/185x278';
-      return `https://image.tmdb.org/t/p/${size}${path}`;
+      return urlHelpers.tmdbUrl(size, path);
     }
   },
   filters: {
     formatCurrency: num => {
-      if (!num) return '-';
-      const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0
-      });
-      return formatter.format(num);
+      return numberHelpers.numberToCurrency(num);
+    },
+    formatDate: str => {
+      return dateHelpers.strToDate(str);
     }
   }
 };

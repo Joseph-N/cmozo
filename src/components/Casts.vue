@@ -2,7 +2,7 @@
   <div class="casts" v-if="casts">
     <div class="card" v-for="cast in sortedCast" :key="cast.id">
       <div class="poster" style="/*height: 180px;overflow-y: hidden;*/">
-        <img :src="moviePoster('w92', cast.profile_path)" class="card-img-top" />
+        <img :src="imagePath('w185', cast.profile_path)" class="card-img-top" />
       </div>
       <div class="card-body">
         <h5 class="card-title">{{ cast.name }}</h5>
@@ -13,13 +13,14 @@
 </template>
 
 <script>
+import { urlHelpers } from '../js/lib';
 export default {
   name: 'Casts',
   props: ['casts'],
   methods: {
-    moviePoster(size, path) {
+    imagePath(size, path) {
       if (!path) return 'https://via.placeholder.com/185x278';
-      return `https://image.tmdb.org/t/p/w500/${path}`;
+      return urlHelpers.tmdbUrl(size, path);
     }
   },
   computed: {

@@ -1,7 +1,7 @@
 <template>
   <div class="hero-image d-flex" :style="styleObject">
     <div class="poster">
-      <img :src="posterPath('w342', details.poster_path)" class="rounded img-fluid" />
+      <img :src="imagePath('w342', details.poster_path)" class="rounded img-fluid" />
     </div>
     <div class="details flex-grow-1 align-self-center">
       <h1 v-if="type == 'tvshow'">
@@ -11,7 +11,7 @@
           :key="network.id"
           class="float-right network"
         >
-          <img :src="posterPath('h50_filter(negate,000,666)/', network.logo_path)" width="90px" />
+          <img :src="imagePath('h50_filter(negate,000,666)/', network.logo_path)" width="90px" />
         </span>
       </h1>
       <h1 v-else>{{ details.title }}</h1>
@@ -36,7 +36,6 @@
         </ul>
       </div>
 
-      <p class="font-italic tagline mt-1" v-if="details.tagline">{{ details.tagline }}</p>
       <div class="actions mt-4 mb-4">
         <a href="#" class="text-decoration-none action">
           <i class="fas fa-list-alt"></i>
@@ -56,6 +55,8 @@
           <i class="fas fa-play"></i>Play Trailer
         </a>
       </div>
+      <p class="font-italic tagline mt-1" v-if="details.tagline">{{ details.tagline }}</p>
+
       <h4 class="font-weight-bold">Overview</h4>
       <p>{{ details.overview }}</p>
       <p v-if="type == 'tvshow'">Created By: {{ creators.join(',') }}</p>
@@ -66,6 +67,7 @@
 
 <script>
 import * as Vibrant from 'node-vibrant';
+import { urlHelpers } from '../js/lib';
 
 export default {
   name: 'Hero',
@@ -129,13 +131,13 @@ export default {
     parameterize(str) {
       return str.split(' ').join('-');
     },
-    posterPath(size, path) {
+    imagePath(size, path) {
       if (!path) return 'https://via.placeholder.com/342x514';
-      return `https://image.tmdb.org/t/p/${size}${path}`;
+      return urlHelpers.tmdbUrl(size, path);
     },
     backgroundImg() {
       const path = this.details.backdrop_path;
-      const url = `https://image.tmdb.org/t/p/original${path}`;
+      const url = urlHelpers.tmdbUrl('original', path);
       const color = this.colors[2];
       const rgb = `${color[0]},${color[1]},${color[2]}`;
 
@@ -152,7 +154,7 @@ export default {
     getPalette() {
       const imagePATH = this.details.poster_path;
       if (!imagePATH) return;
-      Vibrant.from(`https://image.tmdb.org/t/p/w342${imagePATH}`)
+      Vibrant.from(urlHelpers.tmdbUrl('w342', imagePATH))
         .maxColorCount(200)
         .getPalette()
         .then(palette => {
