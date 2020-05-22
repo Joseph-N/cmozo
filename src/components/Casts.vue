@@ -1,5 +1,5 @@
 <template>
-  <div class="casts border-bottom" v-if="casts">
+  <div class="casts" v-if="casts">
     <div class="card" v-for="cast in casts" :key="cast.id">
       <div class="poster" style="/*height: 180px;overflow-y: hidden;*/">
         <img :src="moviePoster('w92', cast.profile_path)" class="card-img-top" />
