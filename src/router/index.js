@@ -65,6 +65,11 @@ const routes = [
     path: '/tv/:id',
     name: 'TV',
     component: () => import('../views/tv/TvShow.vue')
+  },
+  {
+    path: '/people/:id',
+    name: 'profile',
+    component: () => import('../views/people/Profile.vue')
   }
 ];
 

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { moviesEngine, tvShowsEngine } from './bloodhound';
+import { moviesEngine, tvShowsEngine, peoplesEngine } from './bloodhound';
 import 'typeahead.js/dist/typeahead.jquery';
 
 const typeAhead = {
@@ -25,6 +25,15 @@ const typeAhead = {
         displayKey: 'title',
         templates: {
           header: '<legend class="text-muted">TV Shows</legend>',
+          suggestion: typeAhead.suggestionTemplate
+        }
+      },
+      {
+        source: peoplesEngine,
+        limit: 5,
+        displayKey: 'title',
+        templates: {
+          header: '<legend class="text-muted">People</legend>',
           suggestion: typeAhead.suggestionTemplate
         }
       }

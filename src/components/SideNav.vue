@@ -1,7 +1,9 @@
 <template>
   <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
     <div class="sidebar-sticky pt-3">
-      <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+      <h6
+        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+      >
         <span>Movies</span>
         <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
           <span data-feather="plus-circle"></span>
@@ -9,30 +11,48 @@
       </h6>
       <ul class="nav flex-column">
         <li class="nav-item">
-          <router-link to="/discover" class="nav-link" v-bind:class="{ active: currentPage('Discover') }">
+          <router-link
+            to="/discover"
+            class="nav-link"
+            v-bind:class="{ active: currentPage('Discover') }"
+          >
             <i class="fas fa-magic"></i>Discover
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/trending" class="nav-link" v-bind:class="{ active: currentPage('Trending') }">
+          <router-link
+            to="/trending"
+            class="nav-link"
+            v-bind:class="{ active: currentPage('Trending') }"
+          >
             <i class="fas fa-chart-line"></i>Trending
           </router-link>
         </li>
 
         <li class="nav-item">
-          <router-link to="/upcoming" class="nav-link" v-bind:class="{ active: currentPage('Upcoming') }">
+          <router-link
+            to="/upcoming"
+            class="nav-link"
+            v-bind:class="{ active: currentPage('Upcoming') }"
+          >
             <i class="fas fa-broadcast-tower"></i>Upcoming
           </router-link>
         </li>
 
         <li class="nav-item">
-          <router-link to="/now-playing" class="nav-link" v-bind:class="{ active: currentPage('NowPlaying') }">
+          <router-link
+            to="/now-playing"
+            class="nav-link"
+            v-bind:class="{ active: currentPage('NowPlaying') }"
+          >
             <i class="fas fa-glasses"></i>Now Playing
           </router-link>
         </li>
       </ul>
 
-      <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+      <h6
+        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+      >
         <span>TV Shows</span>
         <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
           <span data-feather="plus-circle"></span>
@@ -40,23 +60,39 @@
       </h6>
       <ul class="nav flex-column mb-2">
         <li class="nav-item">
-          <router-link to="/tv/top-rated" class="nav-link" v-bind:class="{ active: currentPage('TopRatedTV') }">
+          <router-link
+            to="/tv/top-rated"
+            class="nav-link"
+            v-bind:class="{ active: currentPage('TopRatedTV') }"
+          >
             <i class="fas fa-crown"></i>Top Rated
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/tv/popular" class="nav-link" v-bind:class="{ active: currentPage('Popular') }">
+          <router-link
+            to="/tv/popular"
+            class="nav-link"
+            v-bind:class="{ active: currentPage('Popular') }"
+          >
             <i class="fas fa-thumbs-up"></i> Popular
           </router-link>
         </li>
 
         <li class="nav-item">
-          <router-link to="/tv/airing-today" class="nav-link" v-bind:class="{ active: currentPage('AiringToday') }">
+          <router-link
+            to="/tv/airing-today"
+            class="nav-link"
+            v-bind:class="{ active: currentPage('AiringToday') }"
+          >
             <i class="fas fa-satellite-dish"></i> Airing Today
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/tv/on-the-air" class="nav-link" v-bind:class="{ active: currentPage('OnAir') }">
+          <router-link
+            to="/tv/on-the-air"
+            class="nav-link"
+            v-bind:class="{ active: currentPage('OnAir') }"
+          >
             <i class="fas fa-desktop"></i> On Tv
           </router-link>
         </li>

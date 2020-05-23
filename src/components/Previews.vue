@@ -16,6 +16,7 @@ export default {
   props: ['collection', 'type'],
   methods: {
     imagePath(size, path) {
+      if (!path) return 'https://via.placeholder.com/500x750';
       return urlHelpers.tmdbUrl(size, path);
     }
   }

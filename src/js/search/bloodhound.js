@@ -27,6 +27,19 @@ const filterShows = response => {
   });
 };
 
+const filterPeople = response => {
+  return response.results.map(profile => {
+    return {
+      id: profile.id,
+      title: profile.name,
+      type: 'profile',
+      overview: `Known for: ${profile.known_for.map(r => r.title).join(', ')}`,
+      year: `Popularity: ${profile.popularity}`,
+      poster: profile.profile_path ? urlHelpers.tmdbUrl('w92', profile.profile_path) : 'https://placehold.it/92x138'
+    };
+  });
+};
+
 const moviesEngine = new Bloodhound({
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
@@ -59,4 +72,20 @@ const tvShowsEngine = new Bloodhound({
   }
 });
 
-export { moviesEngine, tvShowsEngine };
+const peoplesEngine = new Bloodhound({
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
+  dupDetector: (a, b) => {
+    return a.id === b.id;
+  },
+  identify: o => {
+    return o.id;
+  },
+  remote: {
+    url: `https://api.themoviedb.org/3/search/person?api_key=${process.env.VUE_APP_API_KEY}&language=en-US&query=%QUERY`,
+    wildcard: '%QUERY',
+    filter: filterPeople
+  }
+});
+
+export { moviesEngine, tvShowsEngine, peoplesEngine };
