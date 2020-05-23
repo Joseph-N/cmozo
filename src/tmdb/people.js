@@ -1,7 +1,7 @@
 import axios from '../axios';
 
 const tmdbPeople = {
-  async poplular() {
+  async popular() {
     const response = await axios.get('/person/popular');
     return response.data;
   },

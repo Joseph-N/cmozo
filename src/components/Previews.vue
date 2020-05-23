@@ -2,7 +2,11 @@
   <div class="row">
     <div class="card" v-for="item in collection" :key="item.id">
       <router-link :to="{ name: type, params: { id: item.id } }">
-        <img :src="imagePath('w342', item.poster_path)" class="card-img-top" />
+        <img
+          :src="imagePath('w342', item.poster_path)"
+          class="card-img-top"
+          :title="item.name || item.title"
+        />
       </router-link>
     </div>
   </div>

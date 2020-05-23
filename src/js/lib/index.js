@@ -1,3 +1,9 @@
+const arraysHelpers = {
+  uniq: arr => {
+    let uniq = {};
+    return arr.filter(obj => !uniq[obj.id] && (uniq[obj.id] = true));
+  }
+};
 const numberHelpers = {
   numberToCurrency: num => {
     if (!num) return '-';
@@ -28,4 +34,4 @@ const urlHelpers = {
   }
 };
 
-export { numberHelpers, urlHelpers, dateHelpers };
+export { numberHelpers, urlHelpers, dateHelpers, arraysHelpers };

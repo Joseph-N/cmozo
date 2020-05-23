@@ -19,9 +19,11 @@
         <h1 class="mb-4">{{ profile.name }}</h1>
         <h4>Biography</h4>
         <p>{{ profile.biography }}</p>
-        <h4>Movies</h4>
+      </div>
+      <div class="col-12">
+        <h4 class="mt-3 mb-4">Movies</h4>
         <Previews :collection="actorMovies" type="Movie" />
-        <h4>Tv</h4>
+        <h4 class="mt-3 mb-4">Tv</h4>
         <Previews :collection="actorTv" type="TV" />
       </div>
     </div>
@@ -30,7 +32,7 @@
 
 <script>
 import { tmdbPeople } from '../../tmdb';
-import { urlHelpers } from '../../js/lib';
+import { urlHelpers, arraysHelpers } from '../../js/lib';
 import Previews from '../../components/Previews';
 
 export default {
@@ -40,7 +42,11 @@ export default {
   },
   data() {
     return {
-      profile: {}
+      profile: {
+        combined_credits: {
+          cast: []
+        }
+      }
     };
   },
   methods: {
@@ -50,14 +56,52 @@ export default {
     imagePath(size, path) {
       if (!path) return 'https://via.placeholder.com/500x750';
       return urlHelpers.tmdbUrl(size, path);
+    },
+    byYear: (a, b) => {
+      const key = a.media_type === 'movie' ? 'release_date' : 'first_air_date';
+      const year1 = a[key];
+      const year2 = b[key];
+
+      let comparison = 0;
+      if (year1 > year2) {
+        comparison = -1; // descending order
+      } else if (year1 < year2) {
+        comparison = 1;
+      }
+      return comparison;
+    },
+    byPopularity: (a, b) => {
+      const score1 = a.popularity;
+      const score2 = b.popularity;
+
+      let comparison = 0;
+      if (score1 > score2) {
+        comparison = -1; // descending order
+      } else if (score1 < score2) {
+        comparison = 1;
+      }
+      return comparison;
     }
   },
   computed: {
     actorMovies() {
-      return this.profile.combined_credits.cast.filter(result => result.media_type === 'movie');
+      const movies = this.profile.combined_credits.cast.filter(result => result.media_type === 'movie');
+      const uniqMovies = arraysHelpers.uniq(movies);
+      return uniqMovies
+        .sort(this.byPopularity)
+        .slice(0, 7)
+        .sort(this.byYear); // top 6
     },
     actorTv() {
-      return this.profile.combined_credits.cast.filter(result => result.media_type === 'tv');
+      const shows = this.profile.combined_credits.cast.filter(
+        result => result.media_type === 'tv' && result.character != '' && result.poster_path != null
+      );
+      const uniqShows = arraysHelpers.uniq(shows);
+
+      return uniqShows
+        .sort(this.byPopularity)
+        .slice(0, 7)
+        .sort(this.byYear); // top 6
     }
   },
   created() {
