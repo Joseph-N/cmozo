@@ -31,8 +31,10 @@ export default {
     };
   },
   methods: {
-    searchMovie(name) {
-      tmdbMovies.search(name).then(response => {
+    searchMovie() {
+      this.query = this.$route.query.q;
+      if (!this.query) return;
+      tmdbMovies.search(this.query).then(response => {
         this.total_results = response.total_results;
         this.results = response.results;
       });
@@ -44,8 +46,12 @@ export default {
     }
   },
   created() {
-    this.query = this.$route.query.q;
-    if (this.query) return this.searchMovie(this.query);
+    this.searchMovie();
+  },
+  watch: {
+    $route() {
+      this.searchMovie();
+    }
   }
 };
 </script>

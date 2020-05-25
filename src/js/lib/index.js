@@ -4,6 +4,25 @@ const arraysHelpers = {
     return arr.filter(obj => !uniq[obj.id] && (uniq[obj.id] = true));
   }
 };
+
+const textHelpers = {
+  lang: code => {
+    const mappings = {
+      en: 'English',
+      de: 'German',
+      es: 'Spanish',
+      fr: 'French',
+      hi: 'Hindi',
+      it: 'Italian',
+      ja: 'Japanese',
+      ko: 'Korean',
+      ru: 'Russian',
+      ar: 'Arabic'
+    };
+    return mappings[code];
+  }
+};
+
 const numberHelpers = {
   numberToCurrency: num => {
     if (!num) return '-';
@@ -34,4 +53,4 @@ const urlHelpers = {
   }
 };
 
-export { numberHelpers, urlHelpers, dateHelpers, arraysHelpers };
+export { numberHelpers, urlHelpers, dateHelpers, arraysHelpers, textHelpers };

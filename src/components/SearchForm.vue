@@ -13,7 +13,6 @@
       v-model.trim="q"
       class="form-control form-control-dark typeahead"
       placeholder="Search Movies, TV Shows, People"
-      @keyup.enter="gotoSearch"
     />
     <div class="input-group-append">
       <button class="btn btn-outline-secondary" type="button" v-on:click="gotoSearch">
@@ -37,9 +36,7 @@ export default {
   methods: {
     gotoSearch() {
       if (!this.q.length) return;
-      console.log('Enter clicked');
-      // let slug = slugify(this.q);
-      this.$router.push({ path: 'search', query: { q: this.q } });
+      this.$router.push({ path: 'search', query: { q: this.q } }); //.catch(err => {console.log(err); });
     },
     initAutocomplete() {
       const inputEl = $('.typeahead');
@@ -56,6 +53,12 @@ export default {
       });
       inputEl.on('typeahead:asynccancel typeahead:asyncreceive', function() {
         vm.searching = false;
+      });
+      inputEl.on('keydown', function(e) {
+        if (e.keyCode == 13) {
+          typeAhead.close(inputEl);
+          vm.gotoSearch();
+        }
       });
     }
   },

@@ -34,12 +34,12 @@
     <p v-if="facts.original_language">
       <strong>Original Language</strong>
       <br />
-      {{ facts.original_language }}
+      {{ facts.original_language | language }}
     </p>
     <p v-if="facts.languages">
       <strong>Languages</strong>
       <br />
-      {{ facts.languages.join(', ') }}
+      <span class="languages" v-for="lang in facts.languages" :key="lang">{{ lang | language }}</span>
     </p>
     <p v-if="facts.budget">
       <strong>Budget</strong>
@@ -59,7 +59,7 @@
   </div>
 </template>
 <script>
-import { urlHelpers, numberHelpers, dateHelpers } from '../js/lib';
+import { urlHelpers, numberHelpers, dateHelpers, textHelpers } from '../js/lib';
 
 export default {
   name: 'Details',
@@ -76,9 +76,18 @@ export default {
     },
     formatDate: str => {
       return dateHelpers.strToDate(str);
+    },
+    language: code => {
+      return textHelpers.lang(code);
     }
   }
 };
 </script>
 <style scoped>
+.languages::after {
+  content: ', ';
+}
+.languages:last-child::after {
+  content: '';
+}
 </style>

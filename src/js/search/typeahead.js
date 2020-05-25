@@ -39,6 +39,9 @@ const typeAhead = {
       }
     );
   },
+  close: inputEl => {
+    inputEl.typeahead('close');
+  },
   suggestionTemplate: data => {
     return `<div class="media">
                 <img src="${data.poster}" class="mr-3">
