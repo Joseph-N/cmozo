@@ -8,7 +8,7 @@ const filterMovies = response => {
       title: movie.title,
       type: 'Movie',
       overview: movie.overview,
-      year: movie.release_date.split('-')[0],
+      year: movie.release_date ? movie.release_date.split('-')[0] : '-',
       poster: movie.poster_path ? urlHelpers.tmdbUrl('w92', movie.poster_path) : 'https://placehold.it/92x138'
     };
   });

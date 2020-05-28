@@ -1,56 +1,143 @@
 <template>
-  <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <router-link to="/" class="navbar-brand col-md-3 col-lg-2 mr-0 px-3">
-      <i class="fab fa-untappd"></i>
-      CMOZO
-    </router-link>
-    <button
-      class="navbar-toggler position-absolute d-md-none collapsed"
-      type="button"
-      data-toggle="collapse"
-      data-target="#sidebarMenu"
-      aria-controls="sidebarMenu"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
+  <!-- Topbar -->
+  <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+    <!-- Sidebar Toggle (Topbar) -->
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+      <i class="fa fa-bars"></i>
     </button>
 
-    <SearchForm />
+    <!-- Topbar Search -->
+    <search-form></search-form>
 
-    <ul class="navbar-nav px-3">
-      <li class="nav-item text-nowrap">
-        <a class="nav-link" href="#">Sign out</a>
+    <!-- Topbar Navbar -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+      <li class="nav-item dropdown no-arrow d-sm-none">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="searchDropdown"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="fas fa-search fa-fw"></i>
+        </a>
+        <!-- Dropdown - Messages -->
+        <div
+          class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+          aria-labelledby="searchDropdown"
+        >
+          <form class="form-inline mr-auto w-100 navbar-search">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control bg-light border-0 small"
+                placeholder="Search for..."
+                aria-label="Search"
+                aria-describedby="basic-addon2"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </li>
+
+      <div class="topbar-divider d-none d-sm-block"></div>
+
+      <!-- Nav Item - User Information -->
+      <li class="nav-item dropdown no-arrow">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="userDropdown"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+          <img
+            class="img-profile rounded-circle"
+            src="https://source.unsplash.com/QAB-WJcbgJk/60x60"
+          />
+        </a>
+        <!-- Dropdown - User Information -->
+        <div
+          class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+          aria-labelledby="userDropdown"
+        >
+          <a class="dropdown-item" href="#">
+            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+            Profile
+          </a>
+          <a class="dropdown-item" href="#">
+            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+            Settings
+          </a>
+          <a class="dropdown-item" href="#">
+            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+            Activity Log
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            Logout
+          </a>
+        </div>
       </li>
     </ul>
   </nav>
+  <!-- End of Topbar -->
 </template>
 
 <script>
 import SearchForm from '../components/SearchForm';
+import Firebase from '../js/firebase';
 
 export default {
   name: 'TopNav',
   components: {
     SearchForm
+  },
+  data() {
+    return {
+      user: {
+        loggedIn: false,
+        data: {}
+      }
+    };
+  },
+  methods: {
+    login() {
+      Firebase.login();
+    },
+    logout() {
+      Firebase.logout();
+    }
+  },
+  computed: {
+    authenticated() {
+      return this.user.loggedIn;
+    }
+  },
+  mounted: function() {
+    Firebase.auth.onAuthStateChanged(user => {
+      console.log(user);
+      if (user) {
+        this.user.loggedIn = true;
+        this.user.data = user;
+      } else {
+        this.user.loggedIn = false;
+        this.user.data = {};
+      }
+    });
   }
 };
 </script>
-<style scoped>
-/*
- * Navbar
- */
 
-.navbar-brand {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-  font-size: 1rem;
-  background-color: rgba(0, 0, 0, 0.25);
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
-}
-
-.navbar .navbar-toggler {
-  top: 0.25rem;
-  right: 1rem;
-}
-</style>

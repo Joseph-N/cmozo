@@ -12,19 +12,19 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-3">
+      <div class="col-md-3">
         <img :src="imagePath('w500', profile.profile_path)" class="img-fluid rounded" />
       </div>
-      <div class="col-9">
+      <div class="col-md-9">
         <h1 class="mb-4">{{ profile.name }}</h1>
         <h4>Biography</h4>
         <p>{{ profile.biography }}</p>
       </div>
       <div class="col-12">
         <h4 class="mt-3 mb-4">Movies</h4>
-        <Previews :collection="actorMovies" type="Movie" />
+        <Previews :collection="actorMovies" type="Movie" layout="single" />
         <h4 class="mt-3 mb-4">Tv</h4>
-        <Previews :collection="actorTv" type="TV" />
+        <Previews :collection="actorTv" type="TV" layout="single" />
       </div>
     </div>
   </div>

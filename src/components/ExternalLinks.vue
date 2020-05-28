@@ -43,6 +43,9 @@ export default {
 };
 </script>
 <style scoped>
+ul.list-inline {
+  margin-bottom: 0.65rem;
+}
 li.external-links {
   font-size: 1.6rem;
   margin-right: 20px;

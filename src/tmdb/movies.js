@@ -14,7 +14,7 @@ const tmdbMovies = {
     return response.data;
   },
   async get(id) {
-    const response = await axios.get(`movie/${id}?append_to_response=credits,videos,external_ids`);
+    const response = await axios.get(`movie/${id}?append_to_response=credits,videos,external_ids,similar`);
     return response.data;
   },
   async credits(movie_id) {

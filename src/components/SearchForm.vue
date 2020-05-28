@@ -1,5 +1,28 @@
 <template>
-  <div class="input-group w-50">
+  <form class="form-inline mr-auto w-100 navbar-search">
+    <div class="input-group w-50">
+      <div class="loading" v-if="searching">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+      </div>
+      <input
+        type="text"
+        name="q"
+        autocomplete="off"
+        v-model.trim="q"
+        class="form-control bg-light border small typeahead w-100"
+        placeholder="Search Movies, TV Shows, People"
+      />
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button">
+          <i class="fas fa-search fa-sm"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+  <!-- <div class="input-group w-50">
     <div class="loading" v-if="searching">
       <div class="rect1"></div>
       <div class="rect2"></div>
@@ -19,7 +42,7 @@
         <i class="fas fa-search"></i>
       </button>
     </div>
-  </div>
+  </div>-->
 </template>
 
 <script>
@@ -68,26 +91,10 @@ export default {
 };
 </script>
 <style scoped>
-.form-control {
-  padding: 0.75rem 1rem;
-  border-width: 0;
-  border-radius: 0;
-  padding-right: 70px;
+.topbar .navbar-search input {
+  font-size: 1rem;
 }
 
-.form-control-dark {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.form-control-dark:focus {
-  border-color: transparent;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
-}
-button.btn-outline-secondary {
-  border-color: #484d53;
-}
 .loading-border {
   position: absolute;
   right: 45px;
@@ -101,6 +108,7 @@ button.btn-outline-secondary {
   height: 40px;
   text-align: center;
   font-size: 10px;
+  z-index: 100;
 }
 
 .loading > div {
@@ -168,17 +176,13 @@ span.twitter-typeahead .tt-suggestion h5 {
   margin-bottom: 0px;
 }
 span.twitter-typeahead .tt-hint {
-  color: #949494;
+  color: #ff8c8c;
 }
 
 span.twitter-typeahead .tt-dataset legend {
   padding-left: 10px;
   cursor: default;
   font-size: 1.1rem;
-}
-
-span.twitter-typeahead .tt-input {
-  color: #f3f3f3;
 }
 
 span.twitter-typeahead .tt-suggestion p {
@@ -245,26 +249,11 @@ span.twitter-typeahead .tt-suggestion:focus {
   outline: 0;
   background-color: #4e5861;
 }
-.input-group.input-group-lg span.twitter-typeahead .form-control {
-  height: 46px;
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.3333333;
-  border-radius: 6px;
-}
-.input-group.input-group-sm span.twitter-typeahead .form-control {
-  height: 30px;
-  padding: 5px 10px;
-  font-size: 12px;
-  line-height: 1.5;
-  border-radius: 3px;
-}
 span.twitter-typeahead {
   width: 100%;
 }
 .input-group span.twitter-typeahead {
   display: block !important;
-  height: 34px;
 }
 .input-group span.twitter-typeahead .tt-menu,
 .input-group span.twitter-typeahead .tt-dropdown-menu {
@@ -284,19 +273,5 @@ span.twitter-typeahead {
   border-bottom-left-radius: 0;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
-}
-.input-group.input-group-sm span.twitter-typeahead {
-  height: 30px;
-}
-.input-group.input-group-sm span.twitter-typeahead .tt-menu,
-.input-group.input-group-sm span.twitter-typeahead .tt-dropdown-menu {
-  top: 30px !important;
-}
-.input-group.input-group-lg span.twitter-typeahead {
-  height: 46px;
-}
-.input-group.input-group-lg span.twitter-typeahead .tt-menu,
-.input-group.input-group-lg span.twitter-typeahead .tt-dropdown-menu {
-  top: 46px !important;
 }
 </style>

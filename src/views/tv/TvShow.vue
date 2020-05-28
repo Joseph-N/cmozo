@@ -3,7 +3,7 @@
     <Hero :details="show" :type="'tvshow'" v-if="!isEmpty(show)" />
     <div class="row mt-4">
       <div class="col-md-9">
-        <h4 class="mb-3">Series Casts</h4>
+        <h2 class="mb-3 text-gray-900 h3">Series Casts</h2>
         <Casts :casts="show.credits.cast" v-if="show.credits" />
       </div>
       <div class="col-md-3">

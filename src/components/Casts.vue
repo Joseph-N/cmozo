@@ -1,12 +1,12 @@
 <template>
   <div class="casts" v-if="casts">
-    <div class="card" v-for="cast in sortedCast" :key="cast.id">
+    <div class="card mb-4 border-bottom-primary" v-for="cast in sortedCast" :key="cast.id">
       <div class="poster">
         <router-link :to="{ name: 'profile', params: { id: cast.id } }">
           <img :src="imagePath('w185', cast.profile_path)" class="card-img-top" />
         </router-link>
       </div>
-      <div class="card-body">
+      <div class="card-body text-gray-800">
         <h5 class="card-title">{{ cast.name }}</h5>
         <h6 class="card-subtitle mb-2 text-muted">{{ cast.character }}</h6>
       </div>

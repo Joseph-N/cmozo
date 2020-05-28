@@ -1,6 +1,6 @@
 <template>
-  <div class="hero-image d-flex" :style="styleObject">
-    <div class="poster">
+  <div class="hero-image d-flex rounded" :style="styleObject">
+    <div class="poster d-none d-sm-block">
       <img :src="imagePath('w342', details.poster_path)" class="rounded img-fluid" />
     </div>
     <div class="details flex-grow-1 align-self-center">
@@ -37,22 +37,25 @@
       </div>
 
       <div class="actions mt-4 mb-4">
-        <a href="#" class="text-decoration-none action">
+        <a href="#" class="btn btn-secondary btn-circle">
           <i class="fas fa-list-alt"></i>
         </a>
-        <a href="#" class="text-decoration-none action">
+        <a href="#" class="btn btn-secondary btn-circle">
           <i class="fas fa-heart"></i>
         </a>
-        <a href="#" class="text-decoration-none action">
+        <a href="#" class="btn btn-secondary btn-circle">
           <i class="fas fa-flag"></i>
         </a>
         <a
           href="#"
-          class="text-decoration-none"
+          class="btn btn-light btn-icon-split"
           @click.prevent="openModal"
           v-if="details.videos.results.length"
         >
-          <i class="fas fa-play"></i>Play Trailer
+          <span class="icon text-white-50">
+            <i class="fas fa-play"></i>
+          </span>
+          <span class="text">Play Trailer</span>
         </a>
       </div>
       <p class="font-italic tagline mt-1" v-if="details.tagline">{{ details.tagline }}</p>
@@ -176,8 +179,9 @@ export default {
   background-repeat: no-repeat; /* Do not repeat the image */
   background-size: cover; /* Resize the background image to cover the entire container */
   color: #fff;
-  margin-left: -25px;
-  margin-right: -25px;
+  /* margin-left: -24px;
+  margin-right: -24px;
+  margin-top: -24px; */
   padding: 30px;
 }
 .hero-text {
@@ -225,11 +229,17 @@ export default {
 .genres li:last-child::after {
   content: '';
 }
-i.fas.fa-play {
+.actions a {
+  margin-right: 15px;
+}
+.actions a:last-child {
+  margin-left: 30px;
+}
+/* i.fas.fa-play {
   margin-right: 15px;
   color: #fff;
-}
-.actions a {
+} */
+/* .actions a {
   color: #fff;
   width: 50px;
   height: 50px;
@@ -245,7 +255,7 @@ i.fas.fa-play {
 .actions a:last-child {
   font-size: 1.2rem;
   margin-left: 30px;
-}
+} */
 
 .certification {
   border: 1px solid rgba(100%, 100%, 100%, 0.6);

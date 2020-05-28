@@ -1,15 +1,27 @@
 <template>
-  <div id="app">
-    <TopNav />
-    <div class="container-fluid">
-      <div class="row">
-        <SideNav />
-        <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+  <div id="wrapper">
+    <side-nav></side-nav>
+    <!-- content wrapper  -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        <top-nav></top-nav>
+        <!-- Begin page content  -->
+        <div class="container-fluid">
           <router-view />
-        </main>
+        </div>
       </div>
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; CMOZO 2020</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+      <Modal :state="modalState" :embedURL="url" v-on:modal-change="toggleModalState" />
     </div>
-    <Modal :state="modalState" :embedURL="url" v-on:modal-change="toggleModalState" />
   </div>
 </template>
 

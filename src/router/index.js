@@ -7,7 +7,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'Discover',
+    name: 'discover',
     alias: ['/discover'],
     component: Home
   },
@@ -18,17 +18,17 @@ const routes = [
   },
   {
     path: '/trending',
-    name: 'Trending',
+    name: 'trending',
     component: () => import('../views/Trending.vue')
   },
   {
     path: '/upcoming',
-    name: 'Upcoming',
+    name: 'upcoming',
     component: () => import('../views/Upcoming.vue')
   },
   {
     path: '/now-playing',
-    name: 'NowPlaying',
+    name: 'now-playing',
     component: () => import('../views/NowPlaying.vue')
   },
   {
@@ -43,22 +43,22 @@ const routes = [
   },
   {
     path: '/tv/top-rated',
-    name: 'TopRatedTV',
+    name: 'top-rated',
     component: () => import('../views/tv/TopRated.vue')
   },
   {
     path: '/tv/popular',
-    name: 'Popular',
+    name: 'popular',
     component: () => import('../views/tv/Popular.vue')
   },
   {
     path: '/tv/airing-today',
-    name: 'AiringToday',
+    name: 'airing-today',
     component: () => import('../views/tv/AiringToday.vue')
   },
   {
-    path: '/tv/on-the-air',
-    name: 'OnAir',
+    path: '/tv/onair',
+    name: 'onair',
     component: () => import('../views/tv/OnAir.vue')
   },
   {
