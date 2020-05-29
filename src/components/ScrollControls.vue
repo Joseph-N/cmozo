@@ -1,13 +1,9 @@
 <template>
-  <div>
+  <div :class="classObject" :id="`${parent}-controls`">
     <a href="#" class="btn btn-secondary btn-sm paddle to-left" @click.prevent="scrollDiv('left')">
       <i class="fas fa-arrow-left"></i>
     </a>
-    <a
-      href="#"
-      class="btn btn-secondary btn-sm paddle to-right"
-      @click.prevent="scrollDiv('right')"
-    >
+    <a href="#" class="btn btn-secondary btn-sm paddle to-right" @click.prevent="scrollDiv('right')">
       <i class="fas fa-arrow-right"></i>
     </a>
   </div>
@@ -15,9 +11,10 @@
 <script>
 export default {
   name: 'ScrollControls',
+  props: ['parent'],
   methods: {
     scrollDiv(direction) {
-      let container = document.getElementById('posters'),
+      let container = document.getElementById(`${this.parent}`),
         scrollStep = 450;
       let sl = container.scrollLeft,
         cw = container.scrollWidth;
@@ -36,6 +33,23 @@ export default {
           container.scrollTo(sl - scrollStep, 0);
         }
       }
+    },
+    toggleVisibility() {
+      let container = document.getElementById(`${this.parent}`);
+      let controlsContainer = document.getElementById(`${this.parent}-controls`);
+      if (container.scrollWidth <= container.offsetWidth) {
+        controlsContainer.style.display = 'none';
+      } else {
+        controlsContainer.style.display = 'block';
+      }
+    }
+  },
+  computed: {
+    classObject: function() {
+      return {
+        'season-controls': this.parent === 'Season',
+        'default-controls': this.parent != 'Season'
+      };
     }
   }
 };
@@ -50,5 +64,15 @@ export default {
 }
 .paddle.to-right {
   right: 13px;
+}
+.season-controls {
+  position: absolute;
+  top: 25px;
+  right: 0;
+}
+.default-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 </style>

@@ -6,14 +6,14 @@
         <h2 class="mb-3 text-gray-900 h3">Casts</h2>
         <Casts :casts="movie.credits.cast" v-if="movie.credits" />
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 text-gray-900">
         <external-links :ids="movie.external_ids" :homepage="movie.homepage" />
         <Details :facts="facts" />
       </div>
     </div>
     <div class="row mt-4">
       <div class="col-md-12">
-        <h2 class="mb-3 text-gray-900 h3">Similar Movies</h2>
+        <h4 class="mb-3 text-gray-900">Similar Movies</h4>
         <Previews :collection="similarMovies" type="Movie" layout="single" />
       </div>
     </div>

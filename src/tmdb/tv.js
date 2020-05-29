@@ -6,7 +6,7 @@ const tmdbTV = {
     return response.data;
   },
   async get(id) {
-    const response = await axios.get(`tv/${id}?append_to_response=credits,videos,external_ids,content_ratings`);
+    const response = await axios.get(`tv/${id}?append_to_response=credits,videos,external_ids,content_ratings,similar`);
     return response.data;
   },
   async popular() {

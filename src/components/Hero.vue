@@ -6,17 +6,13 @@
     <div class="details flex-grow-1 align-self-center">
       <h1 v-if="type == 'tvshow'">
         {{ details.name }}
-        <span
-          v-for="network in details.networks"
-          :key="network.id"
-          class="float-right network"
-        >
+        <span v-for="network in details.networks" :key="network.id" class="float-right network">
           <img :src="imagePath('h50_filter(negate,000,666)/', network.logo_path)" width="90px" />
         </span>
       </h1>
       <h1 v-else>{{ details.title }}</h1>
       <div class="facts">
-        <span class="certification" v-if="type =='tvshow' && certification">
+        <span class="certification" v-if="type == 'tvshow' && certification">
           <strong>{{ certification.rating }}</strong>
         </span>
         <span>
@@ -29,9 +25,9 @@
         <span class="spacer align-text-bottom">.</span>
         <ul class="genres font-weight-light">
           <li v-for="genre in details.genres" :key="genre.id">
-            <router-link
-              :to="{ name: 'Genre', params: { id: genre.id, name: parameterize(genre.name) } }"
-            >{{ genre.name }}</router-link>
+            <router-link :to="{ name: 'Genre', params: { id: genre.id, name: parameterize(genre.name) } }">{{
+              genre.name
+            }}</router-link>
           </li>
         </ul>
       </div>

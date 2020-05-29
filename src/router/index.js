@@ -67,6 +67,11 @@ const routes = [
     component: () => import('../views/tv/TvShow.vue')
   },
   {
+    path: '/tv/:tvid/seasons/:id',
+    name: 'Season',
+    component: () => import('../views/tv/Season.vue')
+  },
+  {
     path: '/people/:id',
     name: 'profile',
     component: () => import('../views/people/Profile.vue')
