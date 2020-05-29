@@ -1,31 +1,21 @@
 <template>
-  <div>
-    <div
-      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-    >
-      <h1 class="h2">Profile</h1>
-      <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group mr-2">
-          <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-          <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-        </div>
-      </div>
+  <div class="row">
+    <div class="col-md-3">
+      <img :src="imagePath('w500', profile.profile_path)" class="img-fluid rounded" />
     </div>
-    <div class="row">
-      <div class="col-md-3">
-        <img :src="imagePath('w500', profile.profile_path)" class="img-fluid rounded" />
-      </div>
-      <div class="col-md-9">
-        <h1 class="mb-4">{{ profile.name }}</h1>
-        <h4>Biography</h4>
-        <p>{{ profile.biography }}</p>
-      </div>
-      <div class="col-12">
-        <h4 class="mt-3 mb-4">Movies</h4>
-        <Previews :collection="actorMovies" type="Movie" layout="single" />
-        <h4 class="mt-3 mb-4">Tv</h4>
-        <Previews :collection="actorTv" type="TV" layout="single" />
-      </div>
+    <div class="col-md-9">
+      <h1 class="mb-4">{{ profile.name }}</h1>
+      <h4>Biography</h4>
+      <p>{{ profile.biography }}</p>
+    </div>
+    <div class="col-12">
+      <h4 class="mt-3 mb-4">Movies</h4>
+      <Previews :collection="actorMovies" type="Movie" layout="single" />
+    </div>
+
+    <div class="col-12">
+      <h4 class="mt-3 mb-4">Tv</h4>
+      <Previews :collection="actorTv" type="TV" layout="single" />
     </div>
   </div>
 </template>
@@ -89,7 +79,7 @@ export default {
       const uniqMovies = arraysHelpers.uniq(movies);
       return uniqMovies
         .sort(this.byPopularity)
-        .slice(0, 7)
+        .slice(0, 15)
         .sort(this.byYear); // top 6
     },
     actorTv() {
@@ -100,7 +90,7 @@ export default {
 
       return uniqShows
         .sort(this.byPopularity)
-        .slice(0, 7)
+        .slice(0, 15)
         .sort(this.byYear); // top 6
     }
   },

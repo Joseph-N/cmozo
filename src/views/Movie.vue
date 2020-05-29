@@ -89,7 +89,7 @@ export default {
       return this.movie.similar.results
         .slice()
         .sort(this.byYear)
-        .slice(0, 10);
+        .slice(0, 20);
     }
   }
 };

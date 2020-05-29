@@ -94,8 +94,10 @@ export default {
   },
   computed: {
     year() {
-      if (this.type == 'tvshow') return this.details.first_air_date.split('-')[0];
-      return this.details.release_date.split('-')[0];
+      const key = this.type == 'tvshow' ? 'first_air_date' : 'release_date';
+      const date = this.details[key];
+      if (this.type == 'tvshow') return date ? date.split('-')[0] : '-';
+      return date ? date.split('-')[0] : '-';
     },
     creators() {
       if (this.type != 'tvshow') return '';
@@ -109,6 +111,8 @@ export default {
       return `${hours}h ${minutes}m`;
     },
     certification() {
+      const content_ratings = this.details.content_ratings;
+      if (!content_ratings) return '';
       const results = this.details.content_ratings.results;
       if (!results.length) return '';
       const certification = results.filter(result => {

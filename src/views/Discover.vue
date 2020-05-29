@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="h3 mb-4 text-gray-800">Discover</h1>
-    <Previews :collection="cleanedResults" :type="collection_type" />
+    <Previews :collection="cleanedResults" :type="collection_type" layout="multi" />
   </div>
 </template>
 

@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <Previews :collection="cleanedResults" :type="collection_type" />
+    <Previews :collection="cleanedResults" :type="collection_type" layout="multi" />
   </div>
 </template>
 <script>
