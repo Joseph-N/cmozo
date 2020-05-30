@@ -6,7 +6,7 @@
     <div class="details flex-grow-1 align-self-center">
       <h1 v-if="type == 'tvshow'">
         {{ details.name }}
-        <span v-for="network in details.networks" :key="network.id" class="float-right network">
+        <span v-for="network in details.networks.slice(0, 3)" :key="network.id" class="float-right network">
           <img :src="imagePath('h50_filter(negate,000,666)/', network.logo_path)" width="90px" />
         </span>
       </h1>

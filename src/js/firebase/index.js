@@ -4,9 +4,9 @@ import 'firebase/auth';
 firebase.initializeApp({
   projectId: 'personal-projects-22d4e',
   appId: '1:179021044647:web:17a928598f7ddbaa8ef482',
-  databaseURL: 'https://personal-projects-22d4e.firebaseio.com',
+  databaseURL: process.env.VUE_APP_FIREBASE_DB_URL,
   storageBucket: 'personal-projects-22d4e.appspot.com',
-  apiKey: 'AIzaSyBQpHqUsTqoq8XSt_lH2zDw9_YPjHs2jlo',
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
   authDomain: 'personal-projects-22d4e.firebaseapp.com',
   messagingSenderId: '179021044647',
   measurementId: 'G-26E1MQ632E'

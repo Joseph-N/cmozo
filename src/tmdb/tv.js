@@ -9,6 +9,10 @@ const tmdbTV = {
     const response = await axios.get(`tv/${id}?append_to_response=credits,videos,external_ids,content_ratings,similar`);
     return response.data;
   },
+  async season(show_id, season_num) {
+    const response = await axios.get(`/tv/${show_id}/season/${season_num}`);
+    return response.data;
+  },
   async popular() {
     const response = await axios.get('/tv/popular');
     return response.data;
