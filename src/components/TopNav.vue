@@ -25,10 +25,7 @@
           <i class="fas fa-search fa-fw"></i>
         </a>
         <!-- Dropdown - Messages -->
-        <div
-          class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-          aria-labelledby="searchDropdown"
-        >
+        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
           <form class="form-inline mr-auto w-100 navbar-search">
             <div class="input-group">
               <input
@@ -62,16 +59,10 @@
           aria-expanded="false"
         >
           <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
-          <img
-            class="img-profile rounded-circle"
-            src="https://source.unsplash.com/QAB-WJcbgJk/60x60"
-          />
+          <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60" />
         </a>
         <!-- Dropdown - User Information -->
-        <div
-          class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-          aria-labelledby="userDropdown"
-        >
+        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
           <a class="dropdown-item" href="#">
             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
             Profile
@@ -126,18 +117,16 @@ export default {
       return this.user.loggedIn;
     }
   },
-  mounted: function() {
-    Firebase.auth.onAuthStateChanged(user => {
-      console.log(user);
-      if (user) {
-        this.user.loggedIn = true;
-        this.user.data = user;
-      } else {
-        this.user.loggedIn = false;
-        this.user.data = {};
-      }
-    });
+  mounted() {
+    // Firebase.auth.onAuthStateChanged(user => {
+    //   if (user) {
+    //     this.user.loggedIn = true;
+    //     this.user.data = user;
+    //   } else {
+    //     this.user.loggedIn = false;
+    //     this.user.data = {};
+    //   }
+    // });
   }
 };
 </script>
-
