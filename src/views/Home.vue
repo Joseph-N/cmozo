@@ -55,6 +55,7 @@ export default {
 
       moviesQuery
         .orderBy('timestamp', 'desc')
+        .limit(10)
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
@@ -66,6 +67,7 @@ export default {
 
       showsQuery
         .orderBy('timestamp', 'desc')
+        .limit(10)
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {

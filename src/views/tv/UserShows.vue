@@ -56,6 +56,7 @@ export default {
 
       query
         .orderBy('timestamp', 'desc')
+        .limit(24)
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
