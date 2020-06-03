@@ -41,6 +41,11 @@ const routes = [
     component: () => import('../views/Movie.vue')
   },
   {
+    path: '/users/:id/movies',
+    name: 'UserMovies',
+    component: () => import('../views/movies/UserMovies.vue')
+  },
+  {
     path: '/genres/:id-:name',
     name: 'Genre',
     component: () => import('../views/Genre.vue')
@@ -74,6 +79,11 @@ const routes = [
     path: '/tv/:tvid/seasons/:id',
     name: 'Season',
     component: () => import('../views/tv/Season.vue')
+  },
+  {
+    path: '/users/:id/shows',
+    name: 'UserShows',
+    component: () => import('../views/tv/UserShows.vue')
   },
   {
     path: '/people/:id',

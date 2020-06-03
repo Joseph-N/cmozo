@@ -19,6 +19,25 @@ firebase.initializeApp(firebaseConfig);
 
 firebase.auth().onAuthStateChanged(user => {
   store.dispatch('persist_user', user);
+
+  if (!user) return;
+
+  const db = firebase.firestore();
+
+  // Register a profile"
+  db.collection('users')
+    .doc(user.uid)
+    .set({
+      name: user.displayName,
+      email: user.email,
+      avator: user.photoURL
+    })
+    .then(function() {
+      console.log('Profile successfully written!');
+    })
+    .catch(function(error) {
+      console.error('Error writing profile document: ', error);
+    });
 });
 
 export default firebase;

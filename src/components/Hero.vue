@@ -164,8 +164,11 @@ export default {
       const vm = this;
       const db = firebase.firestore();
       const userID = this.currentUser.uid;
+      const collection = this.type == 'tvshow' ? 'shows' : 'movies';
 
-      var query = db.collection(userID).where('id', '==', this.details.id);
+      let query = db.collection(collection).where('user_id', '==', userID);
+      query = query.where('id', '==', this.details.id);
+
       query.get().then(querySnapshot => {
         querySnapshot.forEach(doc => {
           doc.ref.delete();
@@ -178,14 +181,19 @@ export default {
       const db = firebase.firestore();
       const userID = this.currentUser.uid;
       const currentTime = dateHelpers.currTimestamp();
+      const genre_ids = this.details.genres.map(g => g.id);
+      const year = dateHelpers.toTimestamp(vm.details.first_air_date || vm.details.release_date);
+      const collection = this.type == 'tvshow' ? 'shows' : 'movies';
 
-      db.collection(userID)
+      db.collection(collection)
         .add({
           id: vm.details.id,
-          type: vm.type,
           poster_path: vm.details.poster_path,
           name: vm.details.name || vm.details.title,
-          timestamp: currentTime
+          genres: genre_ids,
+          year: year,
+          timestamp: currentTime,
+          user_id: userID
         })
         .then(function() {
           console.log('Document successfully written!');
@@ -199,8 +207,9 @@ export default {
       if (!this.userLoggedIn) return;
       const db = firebase.firestore();
       const userID = this.currentUser.uid;
+      const collection = this.type == 'tvshow' ? 'shows' : 'movies';
 
-      var query = db.collection(userID).where('type', '==', this.type);
+      let query = db.collection(collection).where('user_id', '==', userID);
       query.get().then(querySnapshot => {
         querySnapshot.forEach(doc => {
           this.mycollection.push(doc.data().id);

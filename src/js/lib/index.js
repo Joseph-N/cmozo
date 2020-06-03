@@ -48,6 +48,10 @@ const dateHelpers = {
   currTimestamp: () => {
     var date = new Date();
     return date.getTime();
+  },
+  toTimestamp: str => {
+    var date = new Date(str);
+    return date.getTime();
   }
 };
 

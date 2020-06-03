@@ -1,14 +1,28 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="mb-3 text-gray-900">My Movies</h4>
-      <Previews :collection="movies | limit" type="Movie" layout="single" v-if="movies.length" />
+      <h4 class="mb-3 text-gray-900">
+        My Movies
+        <small style="font-size: 13px;">
+          <router-link :to="{ name: 'UserMovies', params: { id: currentUser.uid } }">
+            View All
+          </router-link>
+        </small>
+      </h4>
+      <Previews :collection="movies" type="Movie" layout="single" v-if="movies.length" />
       <p v-else>It's lonely here...sign in to add movies to your collection</p>
     </div>
 
     <div class="col-md-12 mt-4">
-      <h4 class="mb-3 text-gray-900">My Shows</h4>
-      <Previews :collection="shows | limit" type="TV" layout="single" v-if="shows.length" />
+      <h4 class="mb-3 text-gray-900">
+        My Shows
+        <small style="font-size: 13px;">
+          <router-link :to="{ name: 'UserShows', params: { id: currentUser.uid } }">
+            View All
+          </router-link>
+        </small>
+      </h4>
+      <Previews :collection="shows" type="TV" layout="single" v-if="shows.length" />
       <p v-else>It's lonely here...sign in to add shows to your collection</p>
     </div>
   </div>
@@ -37,13 +51,25 @@ export default {
       const db = firebase.firestore();
       const userID = this.currentUser.uid;
 
-      db.collection(userID)
+      let moviesQuery = db.collection('movies').where('user_id', '==', userID);
+
+      moviesQuery
         .orderBy('timestamp', 'desc')
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
-            let type = doc.data().type;
-            type == 'movie' ? vm.movies.push(doc.data()) : vm.shows.push(doc.data());
+            vm.movies.push(doc.data());
+          });
+        });
+
+      let showsQuery = db.collection('shows').where('user_id', '==', userID);
+
+      showsQuery
+        .orderBy('timestamp', 'desc')
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            vm.shows.push(doc.data());
           });
         });
     }
@@ -62,11 +88,6 @@ export default {
         this.movies = [];
         this.shows = [];
       }
-    }
-  },
-  filters: {
-    limit: arr => {
-      return arr.slice(0, 10);
     }
   }
 };
