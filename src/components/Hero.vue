@@ -33,14 +33,26 @@
       </div>
 
       <div class="actions mt-4 mb-4">
-        <a href="#" class="btn btn-secondary btn-circle">
-          <i class="fas fa-list-alt"></i>
+        <a href="#" class="btn btn-secondary btn-circle" @click.prevent="promptLogin" v-if="!userLoggedIn">
+          <i class="fas fa-plus"></i>
         </a>
-        <a href="#" class="btn btn-secondary btn-circle">
-          <i class="fas fa-heart"></i>
+        <a
+          href="#"
+          class="btn btn-danger btn-circle"
+          @click.prevent="removeFromFirestore"
+          v-show="isAdded"
+          v-if="userLoggedIn"
+        >
+          <i class="fas fa-check"></i>
         </a>
-        <a href="#" class="btn btn-secondary btn-circle">
-          <i class="fas fa-flag"></i>
+        <a
+          href="#"
+          class="btn btn-secondary btn-circle"
+          @click.prevent="addToFirestore"
+          v-show="!isAdded"
+          v-if="userLoggedIn"
+        >
+          <i class="fas fa-plus"></i>
         </a>
         <a
           href="#"
@@ -66,7 +78,9 @@
 
 <script>
 import * as Vibrant from 'node-vibrant';
-import { urlHelpers } from '../js/lib';
+import { urlHelpers, dateHelpers } from '../js/lib';
+import firebase from '../firebase';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Hero',
@@ -76,16 +90,21 @@ export default {
       colors: [],
       styleObject: {
         'background-image': 'linear-gradient(to bottom right, rgb(0, 0, 0,1), rgb(0, 0, 0,0.5))'
-      }
+      },
+      mycollection: []
     };
   },
   created() {
     this.getPalette();
+    this.readFromFirestore();
   },
   watch: {
     // whenever details changes, this function will run
     details: function() {
       this.getPalette();
+    },
+    userLoggedIn: function() {
+      this.readFromFirestore();
     }
   },
   computed: {
@@ -125,7 +144,11 @@ export default {
         }
       });
       return directors;
-    }
+    },
+    isAdded() {
+      return this.mycollection.includes(this.details.id);
+    },
+    ...mapGetters(['userLoggedIn', 'currentUser'])
   },
   methods: {
     openModal() {
@@ -133,6 +156,56 @@ export default {
     },
     parameterize(str) {
       return str.split(' ').join('-');
+    },
+    promptLogin() {
+      alert('Login to add to list');
+    },
+    removeFromFirestore() {
+      const vm = this;
+      const db = firebase.firestore();
+      const userID = this.currentUser.uid;
+
+      var query = db.collection(userID).where('id', '==', this.details.id);
+      query.get().then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          doc.ref.delete();
+          vm.mycollection = vm.mycollection.filter(id => id !== this.details.id);
+        });
+      });
+    },
+    addToFirestore() {
+      const vm = this;
+      const db = firebase.firestore();
+      const userID = this.currentUser.uid;
+      const currentTime = dateHelpers.currTimestamp();
+
+      db.collection(userID)
+        .add({
+          id: vm.details.id,
+          type: vm.type,
+          poster_path: vm.details.poster_path,
+          name: vm.details.name || vm.details.title,
+          timestamp: currentTime
+        })
+        .then(function() {
+          console.log('Document successfully written!');
+          vm.mycollection.push(vm.details.id);
+        })
+        .catch(function(error) {
+          console.error('Error writing document: ', error);
+        });
+    },
+    readFromFirestore() {
+      if (!this.userLoggedIn) return;
+      const db = firebase.firestore();
+      const userID = this.currentUser.uid;
+
+      var query = db.collection(userID).where('type', '==', this.type);
+      query.get().then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          this.mycollection.push(doc.data().id);
+        });
+      });
     },
     imagePath(size, path) {
       if (!path) return 'https://via.placeholder.com/342x514';

@@ -48,7 +48,7 @@
       <div class="topbar-divider d-none d-sm-block"></div>
 
       <!-- Nav Item - User Information -->
-      <li class="nav-item dropdown no-arrow">
+      <li class="nav-item dropdown no-arrow" v-show="authenticated">
         <a
           class="nav-link dropdown-toggle"
           href="#"
@@ -58,29 +58,28 @@
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
-          <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60" />
+          <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.name }}</span>
+          <img class="img-profile rounded-circle" :src="user.photoURL" />
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
           <a class="dropdown-item" href="#">
-            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-            Profile
+            <i class="fas fa-ticket-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            My Movies
           </a>
           <a class="dropdown-item" href="#">
-            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-            Settings
-          </a>
-          <a class="dropdown-item" href="#">
-            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-            Activity Log
+            <i class="fas fa-tv fa-sm fa-fw mr-2 text-gray-400"></i>
+            My Shows
           </a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+          <a class="dropdown-item" href="#" @click.prevent="logout">
             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
             Logout
           </a>
         </div>
+      </li>
+      <li class="nav-item" v-show="!authenticated">
+        <a class="nav-link text-gray-600" href="#" @click.prevent="login">Login</a>
       </li>
     </ul>
   </nav>
@@ -89,44 +88,33 @@
 
 <script>
 import SearchForm from '../components/SearchForm';
-import Firebase from '../js/firebase';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'TopNav',
   components: {
     SearchForm
   },
-  data() {
-    return {
-      user: {
-        loggedIn: false,
-        data: {}
-      }
-    };
-  },
   methods: {
     login() {
-      Firebase.login();
+      this.$store
+        .dispatch('login_with_google')
+        .then(() => {
+          // this.initUserFirestore();
+        })
+        .catch(error => console.log(error));
     },
     logout() {
-      Firebase.logout();
+      this.$store.dispatch('logout_user').then(() => {
+        console.log('User logout');
+      });
     }
   },
   computed: {
-    authenticated() {
-      return this.user.loggedIn;
-    }
-  },
-  mounted() {
-    // Firebase.auth.onAuthStateChanged(user => {
-    //   if (user) {
-    //     this.user.loggedIn = true;
-    //     this.user.data = user;
-    //   } else {
-    //     this.user.loggedIn = false;
-    //     this.user.data = {};
-    //   }
-    // });
+    ...mapGetters({
+      authenticated: 'userLoggedIn',
+      user: 'currentUser'
+    })
   }
 };
 </script>

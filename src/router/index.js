@@ -1,15 +1,19 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Discover.vue';
+import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'discover',
-    alias: ['/discover'],
+    name: 'home',
     component: Home
+  },
+  {
+    path: '/discover',
+    name: 'discover',
+    component: () => import('../views/Discover.vue')
   },
   {
     path: '/search',

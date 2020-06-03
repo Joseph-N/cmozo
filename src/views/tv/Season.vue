@@ -5,7 +5,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-md-3">
-              <img :src="imagePath('w500', season.poster_path)" class="img-fluid rounded" />
+              <img :src="imagePath('w780', season.poster_path)" class="img-fluid rounded" />
             </div>
             <div class="col-md-9 text-gray-800">
               <h1 class="mb-2">{{ season.name }}</h1>
@@ -28,7 +28,7 @@
       <div class="card mb-4" v-for="episode in season.episodes" :key="episode.id">
         <div class="row no-gutters">
           <div class="col-md-3">
-            <img :src="imagePath('w300', episode.still_path)" class="card-img" />
+            <img :src="imagePath('original', episode.still_path)" class="card-img" />
           </div>
           <div class="col-md-9">
             <div class="card-body">

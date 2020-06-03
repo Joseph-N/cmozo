@@ -44,6 +44,10 @@ const dateHelpers = {
       day: '2-digit'
     });
     return dateTimeFormat.format(date);
+  },
+  currTimestamp: () => {
+    var date = new Date();
+    return date.getTime();
   }
 };
 
