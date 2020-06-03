@@ -63,14 +63,15 @@
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-          <a class="dropdown-item" href="#">
+          <router-link :to="{ name: 'UserMovies', params: { id: user.uid } }" class="dropdown-item">
             <i class="fas fa-ticket-alt fa-sm fa-fw mr-2 text-gray-400"></i>
             My Movies
-          </a>
-          <a class="dropdown-item" href="#">
+          </router-link>
+          <router-link :to="{ name: 'UserShows', params: { id: user.uid } }" class="dropdown-item">
             <i class="fas fa-tv fa-sm fa-fw mr-2 text-gray-400"></i>
             My Shows
-          </a>
+          </router-link>
+
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#" @click.prevent="logout">
             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
