@@ -59,7 +59,7 @@
           aria-expanded="false"
         >
           <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.name }}</span>
-          <img class="img-profile rounded-circle" :src="user.photoURL" />
+          <img class="img-profile rounded-circle" :src="user.avator" />
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -101,13 +101,13 @@ export default {
       this.$store
         .dispatch('login_with_google')
         .then(() => {
-          // this.initUserFirestore();
+          this.$store.dispatch('read_collection', this.user.uid);
         })
         .catch(error => console.log(error));
     },
     logout() {
       this.$store.dispatch('logout_user').then(() => {
-        console.log('User logout');
+        this.$store.dispatch('reset_collection');
       });
     }
   },

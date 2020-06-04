@@ -78,8 +78,7 @@
 
 <script>
 import * as Vibrant from 'node-vibrant';
-import { urlHelpers, dateHelpers } from '../js/lib';
-import firebase from '../firebase';
+import { urlHelpers } from '../js/lib';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -90,8 +89,7 @@ export default {
       colors: [],
       styleObject: {
         'background-image': 'linear-gradient(to bottom right, rgb(0, 0, 0,1), rgb(0, 0, 0,0.5))'
-      },
-      mycollection: []
+      }
     };
   },
   created() {
@@ -102,9 +100,6 @@ export default {
     // whenever details changes, this function will run
     details: function() {
       this.getPalette();
-    },
-    userLoggedIn: function() {
-      this.readFromFirestore();
     }
   },
   computed: {
@@ -146,9 +141,17 @@ export default {
       return directors;
     },
     isAdded() {
-      return this.mycollection.includes(this.details.id);
+      if (this.type == 'tvshow') {
+        const showIDs = this.userShows.map(show => show.id);
+        return showIDs.includes(this.details.id);
+      } else if (this.type == 'movie') {
+        const movieIDs = this.userMovies.map(movie => movie.id);
+        return movieIDs.includes(this.details.id);
+      } else {
+        return false;
+      }
     },
-    ...mapGetters(['userLoggedIn', 'currentUser'])
+    ...mapGetters(['userLoggedIn', 'currentUser', 'userMovies', 'userShows'])
   },
   methods: {
     openModal() {
@@ -161,60 +164,35 @@ export default {
       alert('Login to add to list');
     },
     removeFromFirestore() {
-      const vm = this;
-      const db = firebase.firestore();
-      const userID = this.currentUser.uid;
+      const details = this.details;
       const collection = this.type == 'tvshow' ? 'shows' : 'movies';
 
-      let query = db.collection(collection).where('user_id', '==', userID);
-      query = query.where('id', '==', this.details.id);
+      const payload = { collection, details };
 
-      query.get().then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          doc.ref.delete();
-          vm.mycollection = vm.mycollection.filter(id => id !== this.details.id);
-        });
-      });
+      this.$store
+        .dispatch('remove_from_collection', payload)
+        .then(() => {})
+        .catch(error => console.log(error));
     },
     addToFirestore() {
-      const vm = this;
-      const db = firebase.firestore();
-      const userID = this.currentUser.uid;
-      const currentTime = dateHelpers.currTimestamp();
-      const genre_ids = this.details.genres.map(g => g.id);
-      const year = dateHelpers.toTimestamp(vm.details.first_air_date || vm.details.release_date);
+      const details = this.details;
       const collection = this.type == 'tvshow' ? 'shows' : 'movies';
 
-      db.collection(collection)
-        .add({
-          id: vm.details.id,
-          poster_path: vm.details.poster_path,
-          name: vm.details.name || vm.details.title,
-          genres: genre_ids,
-          year: year,
-          timestamp: currentTime,
-          user_id: userID
-        })
-        .then(function() {
-          console.log('Document successfully written!');
-          vm.mycollection.push(vm.details.id);
-        })
-        .catch(function(error) {
-          console.error('Error writing document: ', error);
-        });
+      const payload = { collection, details };
+
+      this.$store
+        .dispatch('add_to_collection', payload)
+        .then(() => {})
+        .catch(error => console.log(error));
     },
     readFromFirestore() {
       if (!this.userLoggedIn) return;
-      const db = firebase.firestore();
-      const userID = this.currentUser.uid;
-      const collection = this.type == 'tvshow' ? 'shows' : 'movies';
+      const user_id = this.currentUser.uid;
 
-      let query = db.collection(collection).where('user_id', '==', userID);
-      query.get().then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          this.mycollection.push(doc.data().id);
-        });
-      });
+      this.$store
+        .dispatch('read_collection', user_id)
+        .then(() => {})
+        .catch(error => console.log(error));
     },
     imagePath(size, path) {
       if (!path) return 'https://via.placeholder.com/342x514';

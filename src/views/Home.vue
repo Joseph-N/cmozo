@@ -3,26 +3,26 @@
     <div class="col-md-12">
       <h4 class="mb-3 text-gray-900">
         My Movies
-        <small style="font-size: 13px;">
+        <small style="font-size: 13px;" v-if="userLoggedIn">
           <router-link :to="{ name: 'UserMovies', params: { id: currentUser.uid } }">
             View All
           </router-link>
         </small>
       </h4>
-      <Previews :collection="movies" type="Movie" layout="single" v-if="movies.length" />
+      <Previews :collection="userMovies" type="Movie" layout="single" v-if="userMovies.length" />
       <p v-else>It's lonely here...sign in to add movies to your collection</p>
     </div>
 
     <div class="col-md-12 mt-4">
       <h4 class="mb-3 text-gray-900">
         My Shows
-        <small style="font-size: 13px;">
+        <small style="font-size: 13px;" v-if="userLoggedIn">
           <router-link :to="{ name: 'UserShows', params: { id: currentUser.uid } }">
             View All
           </router-link>
         </small>
       </h4>
-      <Previews :collection="shows" type="TV" layout="single" v-if="shows.length" />
+      <Previews :collection="userShows" type="TV" layout="single" v-if="userShows.length" />
       <p v-else>It's lonely here...sign in to add shows to your collection</p>
     </div>
   </div>
@@ -30,7 +30,6 @@
 
 <script>
 import Previews from '@/components/Previews';
-import firebase from '../firebase';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -38,59 +37,22 @@ export default {
   components: {
     Previews
   },
-  data() {
-    return {
-      movies: [],
-      shows: []
-    };
-  },
   methods: {
     readFromFirestore() {
       if (!this.userLoggedIn) return;
-      const vm = this;
-      const db = firebase.firestore();
-      const userID = this.currentUser.uid;
+      const user_id = this.currentUser.uid;
 
-      let moviesQuery = db.collection('movies').where('user_id', '==', userID);
-
-      moviesQuery
-        .orderBy('timestamp', 'desc')
-        .limit(10)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            vm.movies.push(doc.data());
-          });
-        });
-
-      let showsQuery = db.collection('shows').where('user_id', '==', userID);
-
-      showsQuery
-        .orderBy('timestamp', 'desc')
-        .limit(10)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            vm.shows.push(doc.data());
-          });
-        });
+      this.$store
+        .dispatch('read_collection', user_id)
+        .then(() => {})
+        .catch(error => console.log(error));
     }
   },
-  created() {
+  mounted() {
     this.readFromFirestore();
   },
   computed: {
-    ...mapGetters(['userLoggedIn', 'currentUser'])
-  },
-  watch: {
-    userLoggedIn: function(val) {
-      if (val) {
-        this.readFromFirestore();
-      } else {
-        this.movies = [];
-        this.shows = [];
-      }
-    }
+    ...mapGetters(['userLoggedIn', 'currentUser', 'userShows', 'userMovies'])
   }
 };
 </script>

@@ -5,7 +5,7 @@ const state = {
     uid: null,
     email: null,
     name: '',
-    photoURL: ''
+    avator: ''
   }
 };
 
@@ -20,9 +20,22 @@ const actions = {
     const response = await firebase.auth().signInWithPopup(provider);
     commit('AUTH_SUCCESS', response.user);
   },
-  async persist_user({ commit }, user) {
-    if (!user) return;
-    await commit('AUTH_SUCCESS', user);
+  async set_user({ commit }, user) {
+    const uid = user.uid;
+    const email = user.email;
+    const name = user.displayName;
+    const avator = user.photoURL;
+
+    const profile = { uid, email, name, avator };
+
+    // Register a user"
+    const db = firebase.firestore();
+    await db
+      .collection('users')
+      .doc(uid)
+      .set(profile);
+
+    commit('AUTH_SUCCESS', profile);
   },
   async logout_user({ commit }) {
     await firebase.auth().signOut();
@@ -31,18 +44,15 @@ const actions = {
 };
 
 const mutations = {
-  AUTH_SUCCESS: (state, { displayName, email, uid, photoURL }) => {
-    state.user.uid = uid;
-    state.user.email = email;
-    state.user.name = displayName;
-    state.user.photoURL = photoURL;
+  AUTH_SUCCESS: (state, user) => {
+    state.user = user;
   },
   LOGOUT: state => {
     state.user = {
       uid: null,
       email: null,
       name: '',
-      photoURL: ''
+      avator: ''
     };
   }
 };

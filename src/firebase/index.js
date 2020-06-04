@@ -18,26 +18,13 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 firebase.auth().onAuthStateChanged(user => {
-  store.dispatch('persist_user', user);
-
   if (!user) return;
 
-  const db = firebase.firestore();
-
-  // Register a profile"
-  db.collection('users')
-    .doc(user.uid)
-    .set({
-      name: user.displayName,
-      email: user.email,
-      avator: user.photoURL
-    })
-    .then(function() {
-      console.log('Profile successfully written!');
-    })
-    .catch(function(error) {
-      console.error('Error writing profile document: ', error);
-    });
+  store.dispatch('set_user', user);
+  store
+    .dispatch('read_collection', user.uid)
+    .then(() => {})
+    .catch(error => console.log(error));
 });
 
 export default firebase;
