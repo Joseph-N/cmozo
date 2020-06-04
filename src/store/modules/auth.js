@@ -33,7 +33,7 @@ const actions = {
     await db
       .collection('users')
       .doc(uid)
-      .set(profile);
+      .set(profile, { merge: true });
 
     commit('AUTH_SUCCESS', profile);
   },

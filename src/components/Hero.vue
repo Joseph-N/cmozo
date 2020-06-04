@@ -32,27 +32,50 @@
         </ul>
       </div>
 
-      <div class="actions mt-4 mb-4">
-        <a href="#" class="btn btn-secondary btn-circle" @click.prevent="promptLogin" v-if="!userLoggedIn">
-          <i class="fas fa-plus"></i>
+      <div class="actions mt-4 mb-4" v-if="userLoggedIn">
+        <a
+          href="#"
+          title="I've watched this"
+          class="btn btn-circle"
+          :class="{ 'btn-danger': isWatched, 'btn-secondary': !isWatched }"
+          @click.prevent="toggleWatched"
+        >
+          <i class="fas fa-eye"></i>
+        </a>
+        <a href="#" class="btn btn-secondary btn-circle" title="I like this">
+          <i class="fas fa-thumbs-up"></i>
+        </a>
+        <a href="#" class="btn btn-secondary btn-circle" title="Add to watchlist">
+          <i class="fas fa-history"></i>
+        </a>
+        <a href="#" class="btn btn-secondary btn-circle" title="Add to list">
+          <i class="fas fa-list-alt"></i>
         </a>
         <a
           href="#"
-          class="btn btn-danger btn-circle"
-          @click.prevent="removeFromFirestore"
-          v-show="isAdded"
-          v-if="userLoggedIn"
+          class="btn btn-light btn-icon-split"
+          @click.prevent="openModal"
+          v-if="details.videos.results.length"
         >
-          <i class="fas fa-check"></i>
+          <span class="icon text-white-50">
+            <i class="fas fa-play"></i>
+          </span>
+          <span class="text">Play Trailer</span>
         </a>
-        <a
-          href="#"
-          class="btn btn-secondary btn-circle"
-          @click.prevent="addToFirestore"
-          v-show="!isAdded"
-          v-if="userLoggedIn"
-        >
-          <i class="fas fa-plus"></i>
+      </div>
+
+      <div class="actions mt-4 mb-4" v-else>
+        <a href="#" class="btn btn-secondary btn-circle" @click.prevent="promptLogin">
+          <i class="fas fa-eye"></i>
+        </a>
+        <a href="#" class="btn btn-secondary btn-circle" title="I like this" @click.prevent="promptLogin">
+          <i class="fas fa-thumbs-up"></i>
+        </a>
+        <a href="#" class="btn btn-secondary btn-circle" title="Add to watchlist" @click.prevent="promptLogin">
+          <i class="fas fa-history"></i>
+        </a>
+        <a href="#" class="btn btn-secondary btn-circle" title="Add to list" @click.prevent="promptLogin">
+          <i class="fas fa-list-alt"></i>
         </a>
         <a
           href="#"
@@ -140,18 +163,11 @@ export default {
       });
       return directors;
     },
-    isAdded() {
-      if (this.type == 'tvshow') {
-        const showIDs = this.userShows.map(show => show.id);
-        return showIDs.includes(this.details.id);
-      } else if (this.type == 'movie') {
-        const movieIDs = this.userMovies.map(movie => movie.id);
-        return movieIDs.includes(this.details.id);
-      } else {
-        return false;
-      }
+    isWatched() {
+      const id = this.details.id;
+      return this.type == 'tvshow' ? this.hasShow(id) : this.hasMovie(id);
     },
-    ...mapGetters(['userLoggedIn', 'currentUser', 'userMovies', 'userShows'])
+    ...mapGetters(['userLoggedIn', 'currentUser', 'userMovies', 'userShows', 'hasMovie', 'hasShow'])
   },
   methods: {
     openModal() {
@@ -163,18 +179,10 @@ export default {
     promptLogin() {
       alert('Login to add to list');
     },
-    removeFromFirestore() {
-      const details = this.details;
-      const collection = this.type == 'tvshow' ? 'shows' : 'movies';
-
-      const payload = { collection, details };
-
-      this.$store
-        .dispatch('remove_from_collection', payload)
-        .then(() => {})
-        .catch(error => console.log(error));
+    toggleWatched() {
+      this.isWatched ? this.removeFromWatched() : this.addToWatched();
     },
-    addToFirestore() {
+    addToWatched() {
       const details = this.details;
       const collection = this.type == 'tvshow' ? 'shows' : 'movies';
 
@@ -182,6 +190,17 @@ export default {
 
       this.$store
         .dispatch('add_to_collection', payload)
+        .then(() => {})
+        .catch(error => console.log(error));
+    },
+    removeFromWatched() {
+      const details = this.details;
+      const collection = this.type == 'tvshow' ? 'shows' : 'movies';
+
+      const payload = { collection, details };
+
+      this.$store
+        .dispatch('remove_from_collection', payload)
         .then(() => {})
         .catch(error => console.log(error));
     },
@@ -321,7 +340,7 @@ export default {
   border: 1px solid rgba(100%, 100%, 100%, 0.6);
   color: rgba(100%, 100%, 100%, 0.6);
   margin-right: 10px;
-  padding: 2px 5px 2px 8px;
+  padding: 2px 10px 2px 10px;
 }
 .network {
   padding-left: 10px;

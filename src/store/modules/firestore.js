@@ -10,7 +10,9 @@ const state = {
 const getters = {
   userMovies: state => state.movies,
   userShows: state => state.shows,
-  userProfile: state => state.profile
+  userProfile: state => state.profile,
+  hasMovie: state => id => state.movies.map(movie => movie.id).includes(id),
+  hasShow: state => id => state.shows.map(show => show.id).includes(id)
 };
 
 const actions = {
@@ -33,18 +35,34 @@ const actions = {
     const poster_path = details.poster_path;
     const id = details.id;
     const name = details.name || details.title;
+    // const timestamp = dateHelpers.currTimestamp();
 
-    // Atomically add a new user_id to the "user_ids" array field.
-    const user_ids = firebase.firestore.FieldValue.arrayUnion(user_id);
-    const payload = { id, name, poster_path, year, genres, user_ids };
+    // Atomically add a new user_id to the "watched_by_ids" array field.
+    const watched_by_ids = firebase.firestore.FieldValue.arrayUnion(user_id);
+    const payload = {
+      id,
+      name,
+      poster_path,
+      year,
+      genres,
+      watched_by_ids
+    };
 
     const db = firebase.firestore();
     const collectionRef = db.collection(collection).doc(`${id}`);
 
     await collectionRef.set(payload, { merge: true });
 
+    const userRef = db.collection('users').doc(user_id);
+    const increment = firebase.firestore.FieldValue.increment(1);
+    const incrementPayload = {
+      [collection]: increment
+    };
+    // Update  count
+    await userRef.update(incrementPayload);
+
     // remove users_ids key
-    delete payload.user_ids;
+    delete payload.watched_by_ids;
 
     commit('ADD_TO_COLLECTION', { collection, payload });
   },
@@ -57,10 +75,18 @@ const actions = {
     const db = firebase.firestore();
     const collectionRef = db.collection(collection).doc(`${details.id}`);
 
-    // Atomically remove the user_id from the "user_ids" array field.
+    // Atomically remove the user_id from the "watched_by_ids" array field.
     await collectionRef.update({
-      user_ids: firebase.firestore.FieldValue.arrayRemove(user_id)
+      watched_by_ids: firebase.firestore.FieldValue.arrayRemove(user_id)
     });
+
+    const userRef = db.collection('users').doc(user_id);
+    const decrement = firebase.firestore.FieldValue.increment(-1);
+    const decrementPayload = {
+      [collection]: decrement
+    };
+    // Update count
+    await userRef.update(decrementPayload);
 
     if (collection == 'movies') {
       movies = movies.filter(movie => movie.id !== details.id);
@@ -77,7 +103,7 @@ const actions = {
 
     const db = firebase.firestore();
 
-    let moviesQuery = db.collection('movies').where('user_ids', 'array-contains', user_id);
+    let moviesQuery = db.collection('movies').where('watched_by_ids', 'array-contains', user_id);
     await moviesQuery
       .orderBy('year', 'desc')
       .get()
@@ -87,7 +113,7 @@ const actions = {
         });
       });
 
-    let showsQuery = db.collection('shows').where('user_ids', 'array-contains', user_id);
+    let showsQuery = db.collection('shows').where('watched_by_ids', 'array-contains', user_id);
     await showsQuery
       .orderBy('year', 'desc')
       .get()
