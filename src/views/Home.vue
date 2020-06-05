@@ -41,9 +41,10 @@ export default {
     readFromFirestore() {
       if (!this.userLoggedIn) return;
       const user_id = this.currentUser.uid;
+      const list = 'watched_by';
 
       this.$store
-        .dispatch('read_collection', user_id)
+        .dispatch('read_collection', { user_id, list })
         .then(() => {})
         .catch(error => console.log(error));
     }

@@ -21,10 +21,16 @@ firebase.auth().onAuthStateChanged(user => {
   if (!user) return;
 
   store.dispatch('set_user', user);
-  store
-    .dispatch('read_collection', user.uid)
-    .then(() => {})
-    .catch(error => console.log(error));
+
+  const user_id = user.uid;
+  const lists = ['watched_by', 'liked_by', 'watchlisted_by'];
+
+  lists.forEach(list => {
+    store
+      .dispatch('read_collection', { user_id, list })
+      .then(() => {})
+      .catch(error => console.log(error));
+  });
 });
 
 export default firebase;

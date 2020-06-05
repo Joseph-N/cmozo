@@ -6,7 +6,11 @@
     <div class="details flex-grow-1 align-self-center">
       <h1 v-if="type == 'tvshow'">
         {{ details.name }}
-        <span v-for="network in details.networks.slice(0, 3)" :key="network.id" class="float-right network">
+        <span
+          v-for="network in details.networks.slice(0, 3)"
+          :key="network.id"
+          class="float-right network"
+        >
           <img :src="imagePath('h50_filter(negate,000,666)/', network.logo_path)" width="90px" />
         </span>
       </h1>
@@ -25,70 +29,19 @@
         <span class="spacer align-text-bottom">.</span>
         <ul class="genres font-weight-light">
           <li v-for="genre in details.genres" :key="genre.id">
-            <router-link :to="{ name: 'Genre', params: { id: genre.id, name: parameterize(genre.name) } }">{{
+            <router-link
+              :to="{ name: 'Genre', params: { id: genre.id, name: parameterize(genre.name) } }"
+            >
+              {{
               genre.name
-            }}</router-link>
+              }}
+            </router-link>
           </li>
         </ul>
       </div>
 
-      <div class="actions mt-4 mb-4" v-if="userLoggedIn">
-        <a
-          href="#"
-          title="I've watched this"
-          class="btn btn-circle"
-          :class="{ 'btn-danger': isWatched, 'btn-secondary': !isWatched }"
-          @click.prevent="toggleWatched"
-        >
-          <i class="fas fa-eye"></i>
-        </a>
-        <a href="#" class="btn btn-secondary btn-circle" title="I like this">
-          <i class="fas fa-thumbs-up"></i>
-        </a>
-        <a href="#" class="btn btn-secondary btn-circle" title="Add to watchlist">
-          <i class="fas fa-history"></i>
-        </a>
-        <a href="#" class="btn btn-secondary btn-circle" title="Add to list">
-          <i class="fas fa-list-alt"></i>
-        </a>
-        <a
-          href="#"
-          class="btn btn-light btn-icon-split"
-          @click.prevent="openModal"
-          v-if="details.videos.results.length"
-        >
-          <span class="icon text-white-50">
-            <i class="fas fa-play"></i>
-          </span>
-          <span class="text">Play Trailer</span>
-        </a>
-      </div>
+      <actions :details="details" :type="type"></actions>
 
-      <div class="actions mt-4 mb-4" v-else>
-        <a href="#" class="btn btn-secondary btn-circle" @click.prevent="promptLogin">
-          <i class="fas fa-eye"></i>
-        </a>
-        <a href="#" class="btn btn-secondary btn-circle" title="I like this" @click.prevent="promptLogin">
-          <i class="fas fa-thumbs-up"></i>
-        </a>
-        <a href="#" class="btn btn-secondary btn-circle" title="Add to watchlist" @click.prevent="promptLogin">
-          <i class="fas fa-history"></i>
-        </a>
-        <a href="#" class="btn btn-secondary btn-circle" title="Add to list" @click.prevent="promptLogin">
-          <i class="fas fa-list-alt"></i>
-        </a>
-        <a
-          href="#"
-          class="btn btn-light btn-icon-split"
-          @click.prevent="openModal"
-          v-if="details.videos.results.length"
-        >
-          <span class="icon text-white-50">
-            <i class="fas fa-play"></i>
-          </span>
-          <span class="text">Play Trailer</span>
-        </a>
-      </div>
       <p class="font-italic tagline mt-1" v-if="details.tagline">{{ details.tagline }}</p>
 
       <h4 class="font-weight-bold">Overview</h4>
@@ -103,10 +56,14 @@
 import * as Vibrant from 'node-vibrant';
 import { urlHelpers } from '../js/lib';
 import { mapGetters } from 'vuex';
+import Actions from '../components/Actions';
 
 export default {
   name: 'Hero',
   props: ['details', 'type'],
+  components: {
+    Actions
+  },
   data() {
     return {
       colors: [],
@@ -117,7 +74,6 @@ export default {
   },
   created() {
     this.getPalette();
-    this.readFromFirestore();
   },
   watch: {
     // whenever details changes, this function will run
@@ -163,55 +119,11 @@ export default {
       });
       return directors;
     },
-    isWatched() {
-      const id = this.details.id;
-      return this.type == 'tvshow' ? this.hasShow(id) : this.hasMovie(id);
-    },
-    ...mapGetters(['userLoggedIn', 'currentUser', 'userMovies', 'userShows', 'hasMovie', 'hasShow'])
+    ...mapGetters(['userLoggedIn'])
   },
   methods: {
-    openModal() {
-      this.$root.$emit('open-modal', this.details.videos.results[0].key);
-    },
     parameterize(str) {
       return str.split(' ').join('-');
-    },
-    promptLogin() {
-      alert('Login to add to list');
-    },
-    toggleWatched() {
-      this.isWatched ? this.removeFromWatched() : this.addToWatched();
-    },
-    addToWatched() {
-      const details = this.details;
-      const collection = this.type == 'tvshow' ? 'shows' : 'movies';
-
-      const payload = { collection, details };
-
-      this.$store
-        .dispatch('add_to_collection', payload)
-        .then(() => {})
-        .catch(error => console.log(error));
-    },
-    removeFromWatched() {
-      const details = this.details;
-      const collection = this.type == 'tvshow' ? 'shows' : 'movies';
-
-      const payload = { collection, details };
-
-      this.$store
-        .dispatch('remove_from_collection', payload)
-        .then(() => {})
-        .catch(error => console.log(error));
-    },
-    readFromFirestore() {
-      if (!this.userLoggedIn) return;
-      const user_id = this.currentUser.uid;
-
-      this.$store
-        .dispatch('read_collection', user_id)
-        .then(() => {})
-        .catch(error => console.log(error));
     },
     imagePath(size, path) {
       if (!path) return 'https://via.placeholder.com/342x514';
@@ -308,33 +220,6 @@ export default {
 .genres li:last-child::after {
   content: '';
 }
-.actions a {
-  margin-right: 15px;
-}
-.actions a:last-child {
-  margin-left: 30px;
-}
-/* i.fas.fa-play {
-  margin-right: 15px;
-  color: #fff;
-} */
-/* .actions a {
-  color: #fff;
-  width: 50px;
-  height: 50px;
-}
-.action {
-  color: #fff;
-  padding: 10px;
-  background-color: #343a40b0;
-  margin-right: 15px;
-  text-align: center;
-  border-radius: 25px;
-}
-.actions a:last-child {
-  font-size: 1.2rem;
-  margin-left: 30px;
-} */
 
 .certification {
   border: 1px solid rgba(100%, 100%, 100%, 0.6);

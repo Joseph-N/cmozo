@@ -1,8 +1,16 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="mb-3 text-gray-900">{{ userProfile.name }} Shows</h4>
-      <Previews :collection="userShows" type="TV" layout="multi" />
+      <h4 class="mb-3 text-gray-900">{{ userProfile.name }} Watchlist</h4>
+      <Previews :collection="watchListedShows" type="TV" layout="multi" />
+    </div>
+    <div class="col-md-12">
+      <h4 class="mb-3 text-gray-900">{{ userProfile.name }} Liked</h4>
+      <Previews :collection="likedShows" type="TV" layout="multi" />
+    </div>
+    <div class="col-md-12">
+      <h4 class="mb-3 text-gray-900">{{ userProfile.name }} Watched</h4>
+      <Previews :collection="watchedShows" type="TV" layout="multi" />
     </div>
   </div>
 </template>
@@ -22,22 +30,13 @@ export default {
         .dispatch('get_profile', user_id)
         .then(() => {})
         .catch(error => console.log(error));
-    },
-    getUserShows() {
-      const user_id = this.$route.params.id;
-
-      this.$store
-        .dispatch('read_collection', user_id)
-        .then(() => {})
-        .catch(error => console.log(error));
     }
   },
   created() {
     this.getProfile();
-    this.getUserShows();
   },
   computed: {
-    ...mapGetters(['currentUser', 'userProfile', 'userShows'])
+    ...mapGetters(['currentUser', 'userProfile', 'watchedShows', 'likedShows', 'watchListedShows'])
   }
 };
 </script>

@@ -101,7 +101,9 @@ export default {
       this.$store
         .dispatch('login_with_google')
         .then(() => {
-          this.$store.dispatch('read_collection', this.user.uid);
+          const user_id = this.user.uid;
+          const list = 'watched_by';
+          this.$store.dispatch('read_collection', { user_id, list });
         })
         .catch(error => console.log(error));
     },

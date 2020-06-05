@@ -4,15 +4,20 @@ import { dateHelpers } from '../../js/lib';
 const state = {
   movies: [],
   shows: [],
-  profile: {}
+  profile: {},
+  lists: ['watched_by', 'liked_by', 'watchlisted_by']
 };
 
 const getters = {
   userMovies: state => state.movies,
   userShows: state => state.shows,
   userProfile: state => state.profile,
-  hasMovie: state => id => state.movies.map(movie => movie.id).includes(id),
-  hasShow: state => id => state.shows.map(show => show.id).includes(id)
+  watchedMovies: state => state.movies.filter(movie => movie.watched),
+  likedMovies: state => state.movies.filter(movie => movie.liked),
+  watchListedMovies: state => state.movies.filter(movie => movie.watchlisted),
+  watchedShows: state => state.shows.filter(show => show.watched),
+  likedShows: state => state.shows.filter(show => show.liked),
+  watchListedShows: state => state.shows.filter(show => show.watchlisted)
 };
 
 const actions = {
@@ -28,25 +33,26 @@ const actions = {
       commit('SET_PROFILE', profile);
     }
   },
-  async add_to_collection({ commit }, { collection, details }) {
+  async add_to_collection({ commit, state }, { collection, details, list }) {
     const user_id = this.state.Auth.user.uid;
     const genres = details.genres.map(g => g.id);
     const year = dateHelpers.toTimestamp(details.first_air_date || details.release_date);
     const poster_path = details.poster_path;
     const id = details.id;
     const name = details.name || details.title;
+    const key = list.match(/(.*)_by/)[1];
+
     // const timestamp = dateHelpers.currTimestamp();
 
-    // Atomically add a new user_id to the "watched_by_ids" array field.
-    const watched_by_ids = firebase.firestore.FieldValue.arrayUnion(user_id);
-    const payload = {
-      id,
-      name,
-      poster_path,
-      year,
-      genres,
-      watched_by_ids
-    };
+    let payload = { id, name, poster_path, year, genres };
+
+    // if user has watched the movie remove it from watchlist
+    if (list == 'watched_by') {
+      payload.watchlisted_by = firebase.firestore.FieldValue.arrayRemove(user_id);
+    }
+
+    // Atomically add a new user_id to the provided list
+    payload[list] = firebase.firestore.FieldValue.arrayUnion(user_id);
 
     const db = firebase.firestore();
     const collectionRef = db.collection(collection).doc(`${id}`);
@@ -54,76 +60,135 @@ const actions = {
     await collectionRef.set(payload, { merge: true });
 
     const userRef = db.collection('users').doc(user_id);
-    const increment = firebase.firestore.FieldValue.increment(1);
     const incrementPayload = {
-      [collection]: increment
+      [`${key}_${collection}_count`]: firebase.firestore.FieldValue.increment(1)
     };
     // Update  count
     await userRef.update(incrementPayload);
 
-    // remove users_ids key
-    delete payload.watched_by_ids;
+    // remove key
+    delete payload[list];
 
-    commit('ADD_TO_COLLECTION', { collection, payload });
+    payload[key] = true;
+
+    const items = state[collection];
+    const itemIndex = items.findIndex(item => item.id == id);
+
+    // item not found. Add it to our array
+
+    if (itemIndex === -1) {
+      // if user marks item as watched, remove it from watchlist
+      if (list == 'watched_by') {
+        delete payload.watchlisted_by;
+        payload.watchlisted = false;
+      }
+      commit('ADD_TO_COLLECTION', { collection, payload });
+    } else {
+      // update object in array
+      payload = { ...items[itemIndex], [key]: true };
+
+      // if user marks item as watched, remove it from watchlist
+      if (list == 'watched_by') {
+        delete payload.watchlisted_by;
+        payload.watchlisted = false;
+      }
+
+      commit('UPDATE_COLLECTION', { collection, id, payload });
+    }
   },
-  async remove_from_collection({ commit, state }, { collection, details }) {
-    let movies = state.movies;
-    let shows = state.shows;
-
+  async remove_from_collection({ commit, state }, { collection, details, list }) {
+    const id = details.id;
     const user_id = this.state.Auth.user.uid;
+    const key = list.match(/(.*)_by/)[1];
 
     const db = firebase.firestore();
     const collectionRef = db.collection(collection).doc(`${details.id}`);
 
-    // Atomically remove the user_id from the "watched_by_ids" array field.
+    // Atomically remove the user_id from the given list array field.
     await collectionRef.update({
-      watched_by_ids: firebase.firestore.FieldValue.arrayRemove(user_id)
+      [list]: firebase.firestore.FieldValue.arrayRemove(user_id)
     });
 
     const userRef = db.collection('users').doc(user_id);
-    const decrement = firebase.firestore.FieldValue.increment(-1);
     const decrementPayload = {
-      [collection]: decrement
+      [`${key}_${collection}_count`]: firebase.firestore.FieldValue.increment(-1)
     };
-    // Update count
     await userRef.update(decrementPayload);
 
-    if (collection == 'movies') {
-      movies = movies.filter(movie => movie.id !== details.id);
-    }
-    if (collection == 'shows') {
-      shows = shows.filter(show => show.id !== details.id);
-    }
+    const items = state[collection];
+    // find item index in arry
+    const itemIndex = items.findIndex(item => item.id == id);
 
-    commit('UPDATE_COLLECTION', { movies, shows });
+    // update object in array
+    const payload = { ...items[itemIndex], [key]: false };
+
+    commit('UPDATE_COLLECTION', { collection, id, payload });
   },
-  async read_collection({ commit }, user_id) {
-    let movies = [];
-    let shows = [];
+  async read_collection({ commit, state }, { user_id, list }) {
+    let movies = state.movies;
+    let shows = state.shows;
 
     const db = firebase.firestore();
 
-    let moviesQuery = db.collection('movies').where('watched_by_ids', 'array-contains', user_id);
+    const moviesRef = db.collection('movies');
+    let moviesQuery = moviesRef.where(list, 'array-contains', user_id);
     await moviesQuery
       .orderBy('year', 'desc')
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          movies.push(doc.data());
+          // tag movie
+          const key = list.match(/(.*)_by/)[1];
+          const movie = doc.data();
+
+          // remove _by keys. cleanup object
+          state.lists.forEach(list => {
+            delete movie[list];
+          });
+
+          // find movie in our collection
+          const movieIndex = movies.findIndex(currMovie => currMovie.id == movie.id);
+          if (movieIndex === -1) {
+            // movie not found. Add it to our array
+            movie[key] = true;
+            movies.push(movie);
+          } else {
+            // movie found. Update object
+            movies[movieIndex] = { ...movies[movieIndex], [key]: true };
+          }
         });
       });
 
-    let showsQuery = db.collection('shows').where('watched_by_ids', 'array-contains', user_id);
+    let showsQuery = db.collection('shows').where(list, 'array-contains', user_id);
     await showsQuery
       .orderBy('year', 'desc')
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          shows.push(doc.data());
+          // tag show
+          const key = list.match(/(.*)_by/)[1];
+          const show = doc.data();
+
+          // remove _by keys. cleanup object
+          state.lists.forEach(list => {
+            delete show[list];
+          });
+
+          // find show in our collection
+          // https://medium.com/javascript-in-plain-english/react-updating-a-value-in-state-array-7bae7c7eaef9
+          const showIndex = shows.findIndex(currShow => currShow.id == show.id);
+          if (showIndex === -1) {
+            // show not found. Add it to our array
+            show[key] = true;
+            shows.push(show);
+          } else {
+            // show found. Update object
+            shows[showIndex] = { ...shows[showIndex], [key]: true };
+          }
         });
       });
 
-    commit('UPDATE_COLLECTION', { movies, shows });
+    commit('SET_COLLECTION', { movies, shows });
   },
   async reset_collection({ commit }) {
     await commit('RESET_COLLECTION');
@@ -134,7 +199,12 @@ const mutations = {
   ADD_TO_COLLECTION: (state, { collection, payload }) => {
     state[collection].push(payload);
   },
-  UPDATE_COLLECTION: (state, { movies, shows }) => {
+  UPDATE_COLLECTION: (state, { collection, id, payload }) => {
+    // make the update reactive
+    // https://vuex.vuejs.org/guide/mutations.html#mutations-follow-vue-s-reactivity-rules
+    state[collection] = [...state[collection].filter(item => item.id !== id), payload];
+  },
+  SET_COLLECTION: (state, { movies, shows }) => {
     state.movies = movies;
     state.shows = shows;
   },
