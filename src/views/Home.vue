@@ -4,9 +4,7 @@
       <h4 class="mb-3 text-gray-900">
         My Movies
         <small style="font-size: 13px;" v-if="userLoggedIn">
-          <router-link :to="{ name: 'UserMovies', params: { id: currentUser.uid } }">
-            View All
-          </router-link>
+          <router-link :to="{ name: 'UserMovies', params: { user_id: currentUser.uid } }">View All</router-link>
         </small>
       </h4>
       <Previews :collection="userMovies" type="Movie" layout="single" v-if="userMovies.length" />
@@ -17,9 +15,7 @@
       <h4 class="mb-3 text-gray-900">
         My Shows
         <small style="font-size: 13px;" v-if="userLoggedIn">
-          <router-link :to="{ name: 'UserShows', params: { id: currentUser.uid } }">
-            View All
-          </router-link>
+          <router-link :to="{ name: 'UserShows', params: { user_id: currentUser.uid } }">View All</router-link>
         </small>
       </h4>
       <Previews :collection="userShows" type="TV" layout="single" v-if="userShows.length" />
@@ -36,21 +32,6 @@ export default {
   name: 'Home',
   components: {
     Previews
-  },
-  methods: {
-    readFromFirestore() {
-      if (!this.userLoggedIn) return;
-      const user_id = this.currentUser.uid;
-      const list = 'watched_by';
-
-      this.$store
-        .dispatch('read_collection', { user_id, list })
-        .then(() => {})
-        .catch(error => console.log(error));
-    }
-  },
-  mounted() {
-    this.readFromFirestore();
   },
   computed: {
     ...mapGetters(['userLoggedIn', 'currentUser', 'userShows', 'userMovies'])

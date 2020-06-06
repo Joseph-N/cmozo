@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     getProfile() {
-      const user_id = this.$route.params.id;
+      const user_id = this.$route.params.user_id;
 
       this.$store
         .dispatch('get_profile', user_id)

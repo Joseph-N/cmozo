@@ -2,6 +2,18 @@ const arraysHelpers = {
   uniq: arr => {
     let uniq = {};
     return arr.filter(obj => !uniq[obj.id] && (uniq[obj.id] = true));
+  },
+  byYear: (a, b) => {
+    const year1 = a.year;
+    const year2 = b.year;
+
+    let comparison = 0;
+    if (year1 > year2) {
+      comparison = -1; // descending order
+    } else if (year1 < year2) {
+      comparison = 1;
+    }
+    return comparison;
   }
 };
 

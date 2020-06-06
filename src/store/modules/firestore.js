@@ -1,5 +1,5 @@
 import firebase from '../../firebase';
-import { dateHelpers } from '../../js/lib';
+import { dateHelpers, arraysHelpers } from '../../js/lib';
 
 const state = {
   movies: [],
@@ -9,15 +9,15 @@ const state = {
 };
 
 const getters = {
-  userMovies: state => state.movies,
-  userShows: state => state.shows,
+  userMovies: state => state.movies.sort(arraysHelpers.byYear),
+  userShows: state => state.shows.sort(arraysHelpers.byYear),
   userProfile: state => state.profile,
-  watchedMovies: state => state.movies.filter(movie => movie.watched),
-  likedMovies: state => state.movies.filter(movie => movie.liked),
-  watchListedMovies: state => state.movies.filter(movie => movie.watchlisted),
-  watchedShows: state => state.shows.filter(show => show.watched),
-  likedShows: state => state.shows.filter(show => show.liked),
-  watchListedShows: state => state.shows.filter(show => show.watchlisted)
+  watchedMovies: (state, getters) => getters.userMovies.filter(movie => movie.watched),
+  likedMovies: (state, getters) => getters.userMovies.filter(movie => movie.liked),
+  watchListedMovies: (state, getters) => getters.userMovies.filter(movie => movie.watchlisted),
+  watchedShows: (state, getters) => getters.userShows.filter(show => show.watched),
+  likedShows: (state, getters) => getters.userShows.filter(show => show.liked),
+  watchListedShows: (state, getters) => getters.userShows.filter(show => show.watchlisted)
 };
 
 const actions = {
@@ -35,14 +35,18 @@ const actions = {
   },
   async add_to_collection({ commit, state }, { collection, details, list }) {
     const user_id = this.state.Auth.user.uid;
-    const genres = details.genres.map(g => g.id);
-    const year = dateHelpers.toTimestamp(details.first_air_date || details.release_date);
+    const year = details.year ? details.year : dateHelpers.toTimestamp(details.first_air_date || details.release_date);
     const poster_path = details.poster_path;
     const id = details.id;
     const name = details.name || details.title;
     const key = list.match(/(.*)_by/)[1];
+    let genres = [];
 
-    // const timestamp = dateHelpers.currTimestamp();
+    if (details.genres) {
+      genres = typeof details.genres[0] == 'number' ? details.genres : details.genres.map(g => g.id);
+    } else {
+      genres = [...details.genre_ids];
+    }
 
     let payload = { id, name, poster_path, year, genres };
 

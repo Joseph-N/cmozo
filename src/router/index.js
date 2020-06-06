@@ -41,7 +41,7 @@ const routes = [
     component: () => import('../views/Movie.vue')
   },
   {
-    path: '/users/:id/movies',
+    path: '/users/:user_id/movies',
     name: 'UserMovies',
     component: () => import('../views/movies/UserMovies.vue')
   },
@@ -81,7 +81,7 @@ const routes = [
     component: () => import('../views/tv/Season.vue')
   },
   {
-    path: '/users/:id/shows',
+    path: '/users/:user_id/shows',
     name: 'UserShows',
     component: () => import('../views/tv/UserShows.vue')
   },

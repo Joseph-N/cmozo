@@ -4,26 +4,34 @@
     <div class="card mb-4" v-for="item in collection" :key="item.id">
       <div class="poster">
         <router-link :to="itemParams(item)">
-          <img :src="imagePath('w342', item.poster_path)" class="card-img-top" :title="item.name || item.title" />
+          <img :src="imagePath('w342', item.poster_path)" class="card-img-top" :title="name(item)" />
         </router-link>
       </div>
-      <div class="card-body text-gray-800" v-if="type == 'Season'">
-        <h5 class="card-title text-center">Season {{ item.season_number }}</h5>
+      <div class="card-body text-gray-800">
+        <h5 class="card-title text-center" v-if="type == 'Season'">Season {{ item.season_number }}</h5>
+        <h5
+          class="card-title text-truncate"
+          :title="name(item)"
+          v-if="type == 'Movie' || type == 'TV'"
+        >{{ name(item) }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted" v-if="type != 'Season'">{{ year(item)}}</h6>
+        <quick-actions :type="type" :details="item" v-if="type != 'Season'"></quick-actions>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { urlHelpers } from '../js/lib';
+import { urlHelpers, dateHelpers } from '../js/lib';
 import ScrollControls from '../components/ScrollControls';
-import sha256 from 'crypto-js/sha256';
+import QuickActions from '../components/QuickActions';
 
 export default {
   name: 'Previews',
   props: ['collection', 'type', 'layout', 'tvid'],
   components: {
-    ScrollControls
+    ScrollControls,
+    QuickActions
   },
   methods: {
     imagePath(size, path) {
@@ -36,6 +44,19 @@ export default {
       } else {
         return { name: this.type, params: { id: item.id } };
       }
+    },
+    name(item) {
+      const name = item.title || item.name;
+      return name;
+    },
+    year(item) {
+      let timestamp;
+      if (item.year) {
+        timestamp = item.year;
+      } else {
+        timestamp = dateHelpers.toTimestamp(item.release_date || item.first_air_date);
+      }
+      return new Date(timestamp).getFullYear();
     }
   },
   computed: {
@@ -44,10 +65,6 @@ export default {
         single: this.layout === 'single',
         multi: this.layout === 'multi'
       };
-    },
-    uniqueID() {
-      let id = sha256(JSON.stringify(this.collection));
-      return id.toString();
     }
   }
 };
@@ -57,8 +74,17 @@ export default {
   font-size: 0.95rem;
 }
 
+.card-subtitle {
+  font-size: 0.8rem;
+}
+
 #Season .card-body {
   padding: 0.5rem;
+}
+
+#Movie .card-body,
+#TV .card-body {
+  padding: 0.8rem;
 }
 /* https://www.fourkitchens.com/blog/article/responsive-multi-column-lists-flexbox/ */
 .posters {

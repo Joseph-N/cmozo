@@ -4,7 +4,7 @@
       href="#"
       title="I've watched this"
       class="btn btn-circle"
-      :class="{ 'btn-danger': isWatched, 'btn-secondary': !isWatched }"
+      :class="{ 'btn-success': isWatched, 'btn-secondary': !isWatched }"
       @click.prevent="toggleWatched"
     >
       <i class="fas fa-eye"></i>
@@ -22,7 +22,7 @@
       href="#"
       class="btn btn-circle"
       title="Add to watchlist"
-      :class="{ 'btn-danger': isWatchListed, 'btn-secondary': !isWatchListed }"
+      :class="{ 'btn-primary': isWatchListed, 'btn-secondary': !isWatchListed }"
       @click.prevent="toggleWatchListed"
     >
       <i class="fas fa-history"></i>
@@ -126,19 +126,6 @@ export default {
         .dispatch('remove_from_collection', payload)
         .then(() => {})
         .catch(error => console.log(error));
-    },
-    getUserCollection() {
-      if (!this.userLoggedIn) return;
-      const user_id = this.currentUser.uid;
-      const lists = ['watched_by', 'liked_by', 'watchlisted_by'];
-
-      lists.forEach(list => {
-        console.log('Fetching: ', list);
-        this.$store
-          .dispatch('read_collection', { user_id, list })
-          .then(() => {})
-          .catch(error => console.log(error));
-      });
     }
   },
   computed: {
@@ -182,9 +169,6 @@ export default {
       'likedMovies',
       'likedShows'
     ])
-  },
-  mounted() {
-    this.getUserCollection();
   }
 };
 </script>
