@@ -2,15 +2,15 @@
   <div class="row">
     <div class="col-md-12">
       <h4 class="mb-3 text-gray-900">{{ userProfile.name }} Watchlist</h4>
-      <Previews :collection="watchListedMovies" type="Movie" layout="multi" />
+      <Previews :collection="watchListedMovies" type="movie" layout="multi" />
     </div>
     <div class="col-md-12">
       <h4 class="mb-3 text-gray-900">{{ userProfile.name }} Liked</h4>
-      <Previews :collection="likedMovies" type="Movie" layout="multi" />
+      <Previews :collection="likedMovies" type="movie" layout="multi" />
     </div>
     <div class="col-md-12">
       <h4 class="mb-3 text-gray-900">{{ userProfile.name }} Watched</h4>
-      <Previews :collection="watchedMovies" type="Movie" layout="multi" />
+      <Previews :collection="watchedMovies" type="movie" layout="multi" />
     </div>
   </div>
 </template>

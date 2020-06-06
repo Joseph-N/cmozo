@@ -14,18 +14,18 @@
     <div class="row mt-4">
       <div class="col-md-12">
         <h4 class="mb-3 text-gray-900">Similar Movies</h4>
-        <Previews :collection="similarMovies" type="Movie" layout="single" />
+        <Previews :collection="similarMovies" type="movie" layout="single" />
       </div>
     </div>
   </div>
 </template>
 <script>
-import { tmdbMovies } from '../tmdb';
-import Casts from '../components/Casts';
-import ExternalLinks from '../components/ExternalLinks';
-import Details from '../components/Details';
-import Hero from '../components/Hero';
-import Previews from '../components/Previews';
+import { tmdbMovies } from '@/tmdb';
+import Casts from '@/components/Casts';
+import ExternalLinks from '@/components/ExternalLinks';
+import Details from '@/components/Details';
+import Hero from '@/components/Hero';
+import Previews from '@/components/Previews';
 
 export default {
   name: 'Movie',

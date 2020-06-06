@@ -33,7 +33,7 @@ export default {
     },
     addToList(list) {
       const details = this.details;
-      const collection = this.type == 'TV' ? 'shows' : 'movies';
+      const collection = this.type == 'show' ? 'shows' : 'movies';
       const payload = { collection, details, list };
 
       this.$store
@@ -43,7 +43,7 @@ export default {
     },
     removeFromList(list) {
       const details = this.details;
-      const collection = this.type == 'TV' ? 'shows' : 'movies';
+      const collection = this.type == 'show' ? 'shows' : 'movies';
 
       const payload = { collection, details, list };
 
@@ -56,9 +56,9 @@ export default {
   computed: {
     isWatched() {
       const id = this.details.id;
-      if (this.type == 'TV') {
+      if (this.type == 'show') {
         return this.watchedShows.map(show => show.id).includes(id);
-      } else if (this.type == 'Movie') {
+      } else if (this.type == 'movie') {
         return this.watchedMovies.map(movie => movie.id).includes(id);
       } else {
         return false;
@@ -66,9 +66,9 @@ export default {
     },
     isWatchListed() {
       const id = this.details.id;
-      if (this.type == 'TV') {
+      if (this.type == 'show') {
         return this.watchListedShows.map(show => show.id).includes(id);
-      } else if (this.type == 'Movie') {
+      } else if (this.type == 'movie') {
         return this.watchListedMovies.map(movie => movie.id).includes(id);
       } else {
         return false;
@@ -76,9 +76,9 @@ export default {
     },
     isLiked() {
       const id = this.details.id;
-      if (this.type == 'TV') {
+      if (this.type == 'show') {
         return this.likedShows.map(show => show.id).includes(id);
-      } else if (this.type == 'Movie') {
+      } else if (this.type == 'movie') {
         return this.likedMovies.map(movie => movie.id).includes(id);
       } else {
         return false;

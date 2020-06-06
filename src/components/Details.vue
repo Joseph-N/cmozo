@@ -61,7 +61,7 @@
   </div>
 </template>
 <script>
-import { urlHelpers, numberHelpers, dateHelpers, textHelpers } from '../js/lib';
+import { urlHelpers, numberHelpers, dateHelpers, textHelpers } from '../helpers';
 
 export default {
   name: 'Details',

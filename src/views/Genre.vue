@@ -3,7 +3,7 @@
     <div
       class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
     >
-      <h1 class="h2">Movies &#x3e; {{ genre }}</h1>
+      <h1 class="h2">{{ collectionType }}s &#x3e; {{ genreName }}</h1>
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
           <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -15,8 +15,9 @@
   </div>
 </template>
 <script>
-import { tmdbMovies } from '../tmdb';
-import Previews from '../components/Previews';
+import { tmdbMovies, tmdbTV } from '@/tmdb';
+import { textHelpers } from '../helpers';
+import Previews from '@/components/Previews';
 
 export default {
   name: 'Genre',
@@ -25,24 +26,36 @@ export default {
   },
   data() {
     return {
-      genre: null,
+      genre_name: '',
+      genre_id: '',
       results: [],
-      collection_type: 'Movie'
+      collection_type: ''
     };
   },
   methods: {
     getMovies() {
-      tmdbMovies.byGenre(this.$route.params.id).then(response => (this.results = response.results));
+      tmdbMovies.byGenre(this.genre_id).then(response => (this.results = response.results));
+    },
+    getShows() {
+      tmdbTV.withGenre(this.genre_id).then(response => (this.results = response.results));
     }
   },
   computed: {
     cleanedResults: function() {
       return this.results.filter(result => !!result.poster_path);
+    },
+    genreName() {
+      return textHelpers.capitalize(this.genre_name);
+    },
+    collectionType() {
+      return textHelpers.capitalize(this.collection_type);
     }
   },
   created() {
-    this.genre = this.$route.params.name.split('-').join(' ');
-    this.getMovies();
+    this.collection_type = this.$route.params.type;
+    this.genre_name = this.$route.params.slug;
+    this.genre_id = this.$route.params.id;
+    this.collection_type == 'movie' ? this.getMovies() : this.getShows();
   }
 };
 </script>

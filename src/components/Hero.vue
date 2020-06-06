@@ -4,7 +4,7 @@
       <img :src="imagePath('w342', details.poster_path)" class="rounded img-fluid" />
     </div>
     <div class="details flex-grow-1 align-self-center">
-      <h1 v-if="type == 'tvshow'">
+      <h1 v-if="type == 'show'">
         {{ details.name }}
         <span
           v-for="network in details.networks.slice(0, 3)"
@@ -16,7 +16,7 @@
       </h1>
       <h1 v-else>{{ details.title }}</h1>
       <div class="facts">
-        <span class="certification" v-if="type == 'tvshow' && certification">
+        <span class="certification" v-if="type == 'show' && certification">
           <strong>{{ certification.rating }}</strong>
         </span>
         <span>
@@ -30,7 +30,7 @@
         <ul class="genres font-weight-light">
           <li v-for="genre in details.genres" :key="genre.id">
             <router-link
-              :to="{ name: 'Genre', params: { id: genre.id, name: parameterize(genre.name) } }"
+              :to="{ name: 'Genre', params: { type: type, id: genre.id, slug: slug(genre.name) } }"
             >
               {{
               genre.name
@@ -46,7 +46,7 @@
 
       <h4 class="font-weight-bold">Overview</h4>
       <p>{{ details.overview }}</p>
-      <p v-if="type == 'tvshow'">Created By: {{ creators.join(',') }}</p>
+      <p v-if="type == 'show'">Created By: {{ creators.join(',') }}</p>
       <p v-else>Director: {{ directors[0] }}</p>
     </div>
   </div>
@@ -54,7 +54,7 @@
 
 <script>
 import * as Vibrant from 'node-vibrant';
-import { urlHelpers } from '../js/lib';
+import { urlHelpers, textHelpers } from '../helpers';
 import { mapGetters } from 'vuex';
 import Actions from '../components/Actions';
 
@@ -83,17 +83,17 @@ export default {
   },
   computed: {
     year() {
-      const key = this.type == 'tvshow' ? 'first_air_date' : 'release_date';
+      const key = this.type == 'show' ? 'first_air_date' : 'release_date';
       const date = this.details[key];
-      if (this.type == 'tvshow') return date ? date.split('-')[0] : '-';
+      if (this.type == 'show') return date ? date.split('-')[0] : '-';
       return date ? date.split('-')[0] : '-';
     },
     creators() {
-      if (this.type != 'tvshow') return '';
+      if (this.type != 'show') return '';
       return this.details.created_by.map(creator => creator.name);
     },
     runtime() {
-      if (this.type == 'tvshow') return `${this.details.episode_run_time[0]}m`;
+      if (this.type == 'show') return `${this.details.episode_run_time[0]}m`;
       let num = this.details.runtime;
       let hours = Math.floor(num / 60);
       var minutes = num % 60;
@@ -110,7 +110,7 @@ export default {
       return certification[0];
     },
     directors() {
-      if (this.type == 'tvshow') return '';
+      if (this.type == 'show') return '';
       var directors = [];
       this.details.credits.crew.forEach(function(entry) {
         if (entry.job === 'Director') {
@@ -122,8 +122,8 @@ export default {
     ...mapGetters(['userLoggedIn'])
   },
   methods: {
-    parameterize(str) {
-      return str.split(' ').join('-');
+    slug(str) {
+      return textHelpers.toSlug(str);
     },
     imagePath(size, path) {
       if (!path) return 'https://via.placeholder.com/342x514';

@@ -32,7 +32,17 @@ const textHelpers = {
       ar: 'Arabic'
     };
     return mappings[code];
-  }
+  },
+  capitalize: str => {
+    return str.replace(/\w\S*/g, txt => {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  },
+  toSlug: str =>
+    str
+      .toLowerCase()
+      .replace(/[^\w- ]+/g, '')
+      .replace(/ +/g, '-')
 };
 
 const numberHelpers = {

@@ -69,11 +69,17 @@
           class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
           aria-labelledby="userDropdown"
         >
-          <router-link :to="{ name: 'UserMovies', params: { id: user.uid } }" class="dropdown-item">
+          <router-link
+            :to="{ name: 'user-movies', params: { user_id: user.uid } }"
+            class="dropdown-item"
+          >
             <i class="fas fa-ticket-alt fa-sm fa-fw mr-2 text-gray-400"></i>
             My Movies
           </router-link>
-          <router-link :to="{ name: 'UserShows', params: { id: user.uid } }" class="dropdown-item">
+          <router-link
+            :to="{ name: 'user-shows', params: { user_id: user.uid } }"
+            class="dropdown-item"
+          >
             <i class="fas fa-tv fa-sm fa-fw mr-2 text-gray-400"></i>
             My Shows
           </router-link>

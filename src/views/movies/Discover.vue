@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { tmdbMovies } from '../tmdb';
+import { tmdbMovies } from '@/tmdb';
 import Previews from '@/components/Previews';
 
 export default {
@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       results: [],
-      collection_type: 'Movie'
+      collection_type: 'movie'
     };
   },
   created() {

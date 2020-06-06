@@ -11,9 +11,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/discover',
+    path: '/movies/discover',
     name: 'discover',
-    component: () => import('../views/Discover.vue')
+    component: () => import('../views/movies/Discover.vue')
   },
   {
     path: '/search',
@@ -21,74 +21,74 @@ const routes = [
     component: () => import('../views/Search.vue')
   },
   {
-    path: '/trending',
+    path: '/movies/trending',
     name: 'trending',
-    component: () => import('../views/Trending.vue')
+    component: () => import('../views/movies/Trending.vue')
   },
   {
-    path: '/upcoming',
+    path: '/movies/upcoming',
     name: 'upcoming',
-    component: () => import('../views/Upcoming.vue')
+    component: () => import('../views/movies/Upcoming.vue')
   },
   {
-    path: '/now-playing',
+    path: '/movies/now-playing',
     name: 'now-playing',
-    component: () => import('../views/NowPlaying.vue')
+    component: () => import('../views/movies/NowPlaying.vue')
   },
   {
-    path: '/movies/:id',
-    name: 'Movie',
-    component: () => import('../views/Movie.vue')
+    path: '/movies/:id/:slug',
+    name: 'movie',
+    component: () => import('../views/movies/Movie.vue')
   },
   {
     path: '/users/:user_id/movies',
-    name: 'UserMovies',
+    name: 'user-movies',
     component: () => import('../views/movies/UserMovies.vue')
   },
   {
-    path: '/genres/:id-:name',
+    path: '/:type/genres/:id/:slug',
     name: 'Genre',
     component: () => import('../views/Genre.vue')
   },
   {
-    path: '/tv/top-rated',
+    path: '/shows/top-rated',
     name: 'top-rated',
-    component: () => import('../views/tv/TopRated.vue')
+    component: () => import('../views/shows/TopRated.vue')
   },
   {
-    path: '/tv/popular',
+    path: '/shows/popular',
     name: 'popular',
-    component: () => import('../views/tv/Popular.vue')
+    component: () => import('../views/shows/Popular.vue')
   },
   {
-    path: '/tv/airing-today',
+    path: '/shows/airing-today',
     name: 'airing-today',
-    component: () => import('../views/tv/AiringToday.vue')
+    component: () => import('../views/shows/AiringToday.vue')
   },
   {
-    path: '/tv/onair',
+    path: '/shows/onair',
     name: 'onair',
-    component: () => import('../views/tv/OnAir.vue')
+    component: () => import('../views/shows/OnAir.vue')
   },
   {
-    path: '/tv/:id',
-    name: 'TV',
-    component: () => import('../views/tv/TvShow.vue')
+    path: '/shows/:id/:slug',
+    name: 'show',
+    component: () => import('../views/shows/TvShow.vue')
   },
   {
-    path: '/tv/:tvid/seasons/:id',
-    name: 'Season',
-    component: () => import('../views/tv/Season.vue')
+    path: '/shows/:tvid/seasons/:id',
+    name: 'season',
+    component: () => import('../views/shows/Season.vue')
   },
   {
     path: '/users/:user_id/shows',
-    name: 'UserShows',
-    component: () => import('../views/tv/UserShows.vue')
+    name: 'user-shows',
+    component: () => import('../views/shows/UserShows.vue')
   },
   {
-    path: '/people/:id',
+    path: '/actors/:id/:slug',
     name: 'profile',
-    component: () => import('../views/people/Profile.vue')
+    component: () => import('../views/actors/Profile.vue')
   }
 ];
 

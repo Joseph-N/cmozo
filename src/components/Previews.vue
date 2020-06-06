@@ -8,21 +8,21 @@
         </router-link>
       </div>
       <div class="card-body text-gray-800">
-        <h5 class="card-title text-center" v-if="type == 'Season'">Season {{ item.season_number }}</h5>
+        <h5 class="card-title text-center" v-if="type == 'season'">Season {{ item.season_number }}</h5>
         <h5
           class="card-title text-truncate"
           :title="name(item)"
-          v-if="type == 'Movie' || type == 'TV'"
+          v-if="type == 'movie' || type == 'show'"
         >{{ name(item) }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted" v-if="type != 'Season'">{{ year(item)}}</h6>
-        <quick-actions :type="type" :details="item" v-if="type != 'Season'"></quick-actions>
+        <h6 class="card-subtitle mb-2 text-muted" v-if="type != 'season'">{{ year(item)}}</h6>
+        <quick-actions :type="type" :details="item" v-if="type != 'season'"></quick-actions>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { urlHelpers, dateHelpers } from '../js/lib';
+import { urlHelpers, dateHelpers, textHelpers } from '../helpers';
 import ScrollControls from '../components/ScrollControls';
 import QuickActions from '../components/QuickActions';
 
@@ -39,10 +39,11 @@ export default {
       return urlHelpers.tmdbUrl(size, path);
     },
     itemParams: function(item) {
-      if (this.type === 'Season') {
-        return { name: this.type, params: { tvid: this.tvid, id: item.season_number } };
+      const slug = textHelpers.toSlug(item.title || item.name);
+      if (this.type === 'season') {
+        return { name: this.type, params: { tvid: this.tvid, id: item.season_number, slug: slug } };
       } else {
-        return { name: this.type, params: { id: item.id } };
+        return { name: this.type, params: { id: item.id, slug: slug } };
       }
     },
     name(item) {
@@ -78,12 +79,12 @@ export default {
   font-size: 0.8rem;
 }
 
-#Season .card-body {
+#season .card-body {
   padding: 0.5rem;
 }
 
-#Movie .card-body,
-#TV .card-body {
+#movie .card-body,
+#show .card-body {
   padding: 0.8rem;
 }
 /* https://www.fourkitchens.com/blog/article/responsive-multi-column-lists-flexbox/ */

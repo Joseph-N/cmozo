@@ -1,5 +1,5 @@
 import firebase from '../../firebase';
-import { dateHelpers, arraysHelpers } from '../../js/lib';
+import { dateHelpers, arraysHelpers } from '../../helpers';
 
 const state = {
   movies: [],

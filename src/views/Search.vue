@@ -15,8 +15,8 @@
   </div>
 </template>
 <script>
-import { tmdbMovies } from '../tmdb';
-import Previews from '../components/Previews';
+import { tmdbMovies } from '@/tmdb';
+import Previews from '@/components/Previews';
 
 export default {
   name: 'Search',
@@ -27,7 +27,7 @@ export default {
     return {
       query: null,
       results: [],
-      collection_type: 'Movie'
+      collection_type: 'movie'
     };
   },
   methods: {

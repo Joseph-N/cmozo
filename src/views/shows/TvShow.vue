@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Hero :details="show" :type="'tvshow'" v-if="!isEmpty(show)" />
+    <Hero :details="show" :type="'show'" v-if="!isEmpty(show)" />
     <div class="row mt-4">
       <div class="col-md-9">
         <div class="row">
@@ -10,7 +10,7 @@
           </div>
           <div class="col-md-12">
             <h2 class="mb-3 mt-4 text-gray-900 h3">Seasons</h2>
-            <Previews :collection="seasons" type="Season" layout="single" :tvid="show.id" />
+            <Previews :collection="seasons" type="season" layout="single" :tvid="show.id" />
           </div>
         </div>
       </div>
@@ -22,18 +22,18 @@
     <div class="row mt-4">
       <div class="col-md-12">
         <h2 class="mb-3 text-gray-900 h3">Similar Shows</h2>
-        <Previews :collection="similarShows" type="TV" layout="single" />
+        <Previews :collection="similarShows" type="show" layout="single" />
       </div>
     </div>
   </div>
 </template>
 <script>
-import { tmdbTV } from '../../tmdb';
-import Casts from '../../components/Casts';
-import ExternalLinks from '../../components/ExternalLinks';
-import Details from '../../components/Details';
-import Hero from '../../components/Hero';
-import Previews from '../../components/Previews';
+import { tmdbTV } from '@/tmdb';
+import Casts from '@/components/Casts';
+import ExternalLinks from '@/components/ExternalLinks';
+import Details from '@/components/Details';
+import Hero from '@/components/Hero';
+import Previews from '@/components/Previews';
 
 export default {
   name: 'TvShow',

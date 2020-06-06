@@ -10,20 +10,20 @@
     </div>
     <div class="col-12">
       <h4 class="mt-3 mb-4">Movies</h4>
-      <Previews :collection="actorMovies" type="Movie" layout="single" />
+      <Previews :collection="actorMovies" type="movie" layout="single" />
     </div>
 
     <div class="col-12">
       <h4 class="mt-3 mb-4">Tv</h4>
-      <Previews :collection="actorTv" type="TV" layout="single" />
+      <Previews :collection="actorTv" type="show" layout="single" />
     </div>
   </div>
 </template>
 
 <script>
-import { tmdbPeople } from '../../tmdb';
-import { urlHelpers, arraysHelpers } from '../../js/lib';
-import Previews from '../../components/Previews';
+import { tmdbPeople } from '@/tmdb';
+import { urlHelpers, arraysHelpers } from '@/helpers';
+import Previews from '@/components/Previews';
 
 export default {
   name: 'Profile',

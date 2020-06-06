@@ -2,7 +2,7 @@
   <div class="casts" v-if="casts">
     <div class="card mb-4 border-bottom-primary" v-for="cast in sortedCast" :key="cast.id">
       <div class="poster">
-        <router-link :to="{ name: 'profile', params: { id: cast.id } }">
+        <router-link :to="{ name: 'profile', params: { id: cast.id, slug: slug(cast.name) } }">
           <img :src="imagePath('w185', cast.profile_path)" class="card-img-top" />
         </router-link>
       </div>
@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import { urlHelpers } from '../js/lib';
+import { urlHelpers, textHelpers } from '../helpers';
+
 export default {
   name: 'Casts',
   props: ['casts'],
@@ -23,6 +24,9 @@ export default {
     imagePath(size, path) {
       if (!path) return 'https://via.placeholder.com/185x278';
       return urlHelpers.tmdbUrl(size, path);
+    },
+    slug(name) {
+      return textHelpers.toSlug(name);
     }
   },
   computed: {

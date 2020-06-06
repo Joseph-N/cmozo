@@ -22,31 +22,11 @@
       </div>
     </div>
   </form>
-  <!-- <div class="input-group w-50">
-    <div class="loading" v-if="searching">
-      <div class="rect1"></div>
-      <div class="rect2"></div>
-      <div class="rect3"></div>
-      <div class="rect4"></div>
-    </div>
-    <input
-      type="text"
-      name="q"
-      autocomplete="off"
-      v-model.trim="q"
-      class="form-control form-control-dark typeahead"
-      placeholder="Search Movies, TV Shows, People"
-    />
-    <div class="input-group-append">
-      <button class="btn btn-outline-secondary" type="button" v-on:click="gotoSearch">
-        <i class="fas fa-search"></i>
-      </button>
-    </div>
-  </div>-->
 </template>
 
 <script>
-import { typeAhead, $ } from '../js/search/';
+import { typeAhead, $ } from '../search';
+import { textHelpers } from '../helpers';
 
 export default {
   name: 'SearchForm',
@@ -69,7 +49,9 @@ export default {
       inputEl.bind('typeahead:select', function(ev, suggestion) {
         vm.q = suggestion.title;
         document.activeElement.blur();
-        vm.$router.push({ name: suggestion.type, params: { id: suggestion.id } });
+        const slug = textHelpers.toSlug(suggestion.title);
+
+        vm.$router.push({ name: suggestion.type, params: { id: suggestion.id, slug: slug } });
       });
       inputEl.on('typeahead:asyncrequest', function() {
         vm.searching = true;

@@ -24,6 +24,14 @@ const tmdbTV = {
   async onair() {
     const response = await axios.get('/tv/on_the_air');
     return response.data;
+  },
+  async withGenre(genre_id) {
+    const response = await axios.get(`/discover/tv?with_genres=${genre_id}&sort_by=popularity.desc`);
+    return response.data;
+  },
+  async withNetwork(network_id) {
+    const response = await axios.get(`/discover/tv?with_networks=${network_id}&sort_by=popularity.desc`);
+    return response.data;
   }
 };
 

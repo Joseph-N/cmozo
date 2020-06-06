@@ -2,20 +2,20 @@
   <div class="row">
     <div class="col-md-12">
       <h4 class="mb-3 text-gray-900">{{ userProfile.name }} Watchlist</h4>
-      <Previews :collection="watchListedShows" type="TV" layout="multi" />
+      <Previews :collection="watchListedShows" type="show" layout="multi" />
     </div>
     <div class="col-md-12">
       <h4 class="mb-3 text-gray-900">{{ userProfile.name }} Liked</h4>
-      <Previews :collection="likedShows" type="TV" layout="multi" />
+      <Previews :collection="likedShows" type="show" layout="multi" />
     </div>
     <div class="col-md-12">
       <h4 class="mb-3 text-gray-900">{{ userProfile.name }} Watched</h4>
-      <Previews :collection="watchedShows" type="TV" layout="multi" />
+      <Previews :collection="watchedShows" type="show" layout="multi" />
     </div>
   </div>
 </template>
 <script>
-import Previews from '../../components/Previews';
+import Previews from '@/components/Previews';
 import { mapGetters } from 'vuex';
 
 export default {

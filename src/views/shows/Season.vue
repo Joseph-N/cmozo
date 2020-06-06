@@ -10,11 +10,11 @@
             <div class="col-md-9 text-gray-800">
               <h1 class="mb-2">{{ season.name }}</h1>
               <div class="facts">
-                <span> Season {{ season.season_number }}</span>
+                <span>Season {{ season.season_number }}</span>
                 <span class="spacer align-text-bottom">.</span>
-                <span> Premiered: {{ season.air_date | formatDate }} </span>
+                <span>Premiered: {{ season.air_date | formatDate }}</span>
                 <span class="spacer align-text-bottom">.</span>
-                <span> Episodes: {{ episodeCount }} </span>
+                <span>Episodes: {{ episodeCount }}</span>
               </div>
               <h4 class="font-weight-bold mt-4">Overview</h4>
               <p>{{ season.overview }}</p>
@@ -33,9 +33,7 @@
           <div class="col-md-9">
             <div class="card-body">
               <h5 class="card-title font-weight-bold">{{ episode.name }}</h5>
-              <p class="card-text">
-                {{ episode.overview }}
-              </p>
+              <p class="card-text">{{ episode.overview }}</p>
               <p class="card-text">
                 <small class="text-muted">Episode No: {{ episode.episode_number }}</small>
                 <small class="text-muted border-left">Aired: {{ episode.air_date | formatDate }}</small>
@@ -50,7 +48,7 @@
 
 <script>
 import { tmdbTV } from '../../tmdb/tv';
-import { urlHelpers, dateHelpers } from '../../js/lib';
+import { urlHelpers, dateHelpers } from '../../helpers';
 export default {
   name: 'Season',
   data() {
