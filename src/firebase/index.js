@@ -1,21 +1,23 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/analytics';
 import store from '../store';
 
 var firebaseConfig = {
-  projectId: 'personal-projects-22d4e',
-  appId: '1:179021044647:web:17a928598f7ddbaa8ef482',
-  databaseURL: process.env.VUE_APP_FIREBASE_DB_URL,
-  storageBucket: 'personal-projects-22d4e.appspot.com',
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
-  authDomain: 'personal-projects-22d4e.firebaseapp.com',
-  messagingSenderId: '179021044647',
-  measurementId: 'G-26E1MQ632E'
+  authDomain: `${process.env.VUE_APP_FIREBASE_PROJECT_ID}.firebaseapp.com`,
+  databaseURL: process.env.VUE_APP_FIREBASE_DB_URL,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: `${process.env.VUE_APP_FIREBASE_PROJECT_ID}.appspot.com`,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_SENDER_ID,
+  appId: process.env.VUE_APP_FIREBASE_APP_ID,
+  measurementId: process.env.VUE_APP_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+firebase.analytics();
 
 firebase.auth().onAuthStateChanged(user => {
   if (!user) return;

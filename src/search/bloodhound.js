@@ -1,6 +1,8 @@
 import Bloodhound from 'typeahead.js/dist/bloodhound';
 import { urlHelpers } from '../helpers';
 
+const API_KEY = process.env.VUE_APP_TMDB_API_KEY;
+
 const filterMovies = response => {
   return response.results.map(movie => {
     return {
@@ -50,7 +52,7 @@ const moviesEngine = new Bloodhound({
     return o.id;
   },
   remote: {
-    url: `https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_API_KEY}&language=en-US&query=%QUERY`,
+    url: `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=%QUERY`,
     wildcard: '%QUERY',
     filter: filterMovies
   }
@@ -66,7 +68,7 @@ const tvShowsEngine = new Bloodhound({
     return o.id;
   },
   remote: {
-    url: `https://api.themoviedb.org/3/search/tv?api_key=${process.env.VUE_APP_API_KEY}&language=en-US&query=%QUERY`,
+    url: `https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&language=en-US&query=%QUERY`,
     wildcard: '%QUERY',
     filter: filterShows
   }
@@ -82,7 +84,7 @@ const peoplesEngine = new Bloodhound({
     return o.id;
   },
   remote: {
-    url: `https://api.themoviedb.org/3/search/person?api_key=${process.env.VUE_APP_API_KEY}&language=en-US&query=%QUERY`,
+    url: `https://api.themoviedb.org/3/search/person?api_key=${API_KEY}&language=en-US&query=%QUERY`,
     wildcard: '%QUERY',
     filter: filterPeople
   }
