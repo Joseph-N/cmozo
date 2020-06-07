@@ -19,10 +19,15 @@
         <Details :facts="facts" />
       </div>
     </div>
-    <div class="row mt-4">
+    <div class="row mt-4" v-if="similarShows.length > 0">
       <div class="col-md-12">
         <h2 class="mb-3 text-gray-900 h3">Similar Shows</h2>
-        <Previews :collection="similarShows" type="show" layout="single" />
+        <Previews
+          :collection="similarShows.slice(0,15)"
+          type="show"
+          layout="single"
+          :extras="extras"
+        />
       </div>
     </div>
   </div>
@@ -34,6 +39,8 @@ import ExternalLinks from '@/components/ExternalLinks';
 import Details from '@/components/Details';
 import Hero from '@/components/Hero';
 import Previews from '@/components/Previews';
+import { textHelpers } from '@/helpers';
+import { arraysHelpers } from '../../helpers';
 
 export default {
   name: 'TvShow',
@@ -47,6 +54,7 @@ export default {
   data() {
     return {
       show: {
+        name: '',
         seasons: [],
         similar: {
           results: []
@@ -71,18 +79,6 @@ export default {
     },
     isEmpty(obj) {
       return Object.keys(obj).length === 0;
-    },
-    byYear: (a, b) => {
-      const year1 = a.first_air_date;
-      const year2 = b.first_air_date;
-
-      let comparison = 0;
-      if (year1 > year2) {
-        comparison = -1; // descending order
-      } else if (year1 < year2) {
-        comparison = 1;
-      }
-      return comparison;
     }
   },
   computed: {
@@ -94,13 +90,19 @@ export default {
       return unwrap(this.show);
     },
     similarShows() {
-      return this.show.similar.results
-        .slice()
-        .sort(this.byYear)
-        .slice(0, 20);
+      return this.show.similar.results.slice().sort(arraysHelpers.byYear);
     },
     seasons() {
       return this.show.seasons.filter(season => season.season_number != 0);
+    },
+    extras() {
+      const show_id = this.$route.params.id;
+      const slug = textHelpers.toSlug(this.show.name);
+      let obj = {
+        hasMore: this.similarShows.length > 15,
+        link: { name: 'similar-shows', params: { id: show_id, slug: slug } }
+      };
+      return obj;
     }
   }
 };

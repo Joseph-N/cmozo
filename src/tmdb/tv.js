@@ -17,6 +17,10 @@ const tmdbTV = {
     const response = await axios.get('/tv/popular');
     return response.data;
   },
+  async similar(show_id) {
+    const response = await axios.get(`/tv/${show_id}/similar`);
+    return response.data;
+  },
   async latest() {
     const response = await axios.get('/tv/airing_today');
     return response.data;

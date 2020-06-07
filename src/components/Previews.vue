@@ -18,6 +18,14 @@
         <quick-actions :type="type" :details="item" v-if="type != 'season'"></quick-actions>
       </div>
     </div>
+    <div class="view-more card mb-4 align-items-center justify-content-center" v-if="extras">
+      <p class="font-weight-bold">
+        <router-link :to="extras.link" class="text-gray-800 text-decoration-none">
+          View More
+          <i class="fa fa-arrow-right"></i>
+        </router-link>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -28,7 +36,7 @@ import QuickActions from '../components/QuickActions';
 
 export default {
   name: 'Previews',
-  props: ['collection', 'type', 'layout', 'tvid'],
+  props: ['collection', 'type', 'layout', 'tvid', 'extras'],
   components: {
     ScrollControls,
     QuickActions
@@ -47,8 +55,7 @@ export default {
       }
     },
     name(item) {
-      const name = item.title || item.name;
-      return name;
+      return item.title || item.name;
     },
     year(item) {
       let timestamp;
@@ -71,6 +78,11 @@ export default {
 };
 </script>
 <style scoped>
+.view-more {
+  font-size: 1rem;
+  border: 0;
+  background: transparent;
+}
 .card-title {
   font-size: 0.95rem;
 }

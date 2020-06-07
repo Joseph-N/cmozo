@@ -41,6 +41,12 @@ const routes = [
     component: () => import('../views/movies/Movie.vue')
   },
   {
+    path: '/movies/:id/:slug/similar',
+    name: 'similar-movies',
+    props: { type: 'movie' },
+    component: () => import('../views/Similar.vue')
+  },
+  {
     path: '/users/:user_id/movies',
     name: 'user-movies',
     component: () => import('../views/movies/UserMovies.vue')
@@ -74,6 +80,12 @@ const routes = [
     path: '/shows/:id/:slug',
     name: 'show',
     component: () => import('../views/shows/TvShow.vue')
+  },
+  {
+    path: '/shows/:id/:slug/similar',
+    name: 'similar-shows',
+    props: { type: 'show' },
+    component: () => import('../views/Similar.vue')
   },
   {
     path: '/shows/:tvid/seasons/:id',

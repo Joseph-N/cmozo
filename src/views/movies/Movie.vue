@@ -11,10 +11,15 @@
         <Details :facts="facts" />
       </div>
     </div>
-    <div class="row mt-4">
+    <div class="row mt-4" v-if="similarMovies.length > 0">
       <div class="col-md-12">
         <h4 class="mb-3 text-gray-900">Similar Movies</h4>
-        <Previews :collection="similarMovies" type="movie" layout="single" />
+        <Previews
+          :collection="similarMovies.slice(0,15)"
+          type="movie"
+          layout="single"
+          :extras="extras"
+        />
       </div>
     </div>
   </div>
@@ -26,6 +31,7 @@ import ExternalLinks from '@/components/ExternalLinks';
 import Details from '@/components/Details';
 import Hero from '@/components/Hero';
 import Previews from '@/components/Previews';
+import { textHelpers, arraysHelpers } from '../../helpers';
 
 export default {
   name: 'Movie',
@@ -39,6 +45,7 @@ export default {
   data() {
     return {
       movie: {
+        title: '',
         similar: {
           results: []
         }
@@ -63,18 +70,6 @@ export default {
     },
     isEmpty(obj) {
       return Object.keys(obj).length === 0;
-    },
-    byYear: (a, b) => {
-      const year1 = a.release_date;
-      const year2 = b.release_date;
-
-      let comparison = 0;
-      if (year1 > year2) {
-        comparison = -1; // descending order
-      } else if (year1 < year2) {
-        comparison = 1;
-      }
-      return comparison;
     }
   },
   computed: {
@@ -86,10 +81,16 @@ export default {
       return unwrap(this.movie);
     },
     similarMovies() {
-      return this.movie.similar.results
-        .slice()
-        .sort(this.byYear)
-        .slice(0, 20);
+      return this.movie.similar.results.slice().sort(arraysHelpers.byYear);
+    },
+    extras() {
+      const movie_id = this.$route.params.id;
+      const slug = textHelpers.toSlug(this.movie.title);
+      let obj = {
+        hasMore: this.similarMovies.length > 15,
+        link: { name: 'similar-movies', params: { id: movie_id, slug: slug } }
+      };
+      return obj;
     }
   }
 };

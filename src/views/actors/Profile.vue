@@ -46,31 +46,6 @@ export default {
     imagePath(size, path) {
       if (!path) return 'https://via.placeholder.com/500x750';
       return urlHelpers.tmdbUrl(size, path);
-    },
-    byYear: (a, b) => {
-      const key = a.media_type === 'movie' ? 'release_date' : 'first_air_date';
-      const year1 = a[key];
-      const year2 = b[key];
-
-      let comparison = 0;
-      if (year1 > year2) {
-        comparison = -1; // descending order
-      } else if (year1 < year2) {
-        comparison = 1;
-      }
-      return comparison;
-    },
-    byPopularity: (a, b) => {
-      const score1 = a.popularity;
-      const score2 = b.popularity;
-
-      let comparison = 0;
-      if (score1 > score2) {
-        comparison = -1; // descending order
-      } else if (score1 < score2) {
-        comparison = 1;
-      }
-      return comparison;
     }
   },
   computed: {
@@ -78,9 +53,9 @@ export default {
       const movies = this.profile.combined_credits.cast.filter(result => result.media_type === 'movie');
       const uniqMovies = arraysHelpers.uniq(movies);
       return uniqMovies
-        .sort(this.byPopularity)
+        .sort(arraysHelpers.byPopularity)
         .slice(0, 15)
-        .sort(this.byYear); // top 6
+        .sort(arraysHelpers.byYear); // top 6
     },
     actorTv() {
       const shows = this.profile.combined_credits.cast.filter(
@@ -89,9 +64,9 @@ export default {
       const uniqShows = arraysHelpers.uniq(shows);
 
       return uniqShows
-        .sort(this.byPopularity)
+        .sort(arraysHelpers.byPopularity)
         .slice(0, 15)
-        .sort(this.byYear); // top 6
+        .sort(arraysHelpers.byYear); // top 6
     }
   },
   created() {

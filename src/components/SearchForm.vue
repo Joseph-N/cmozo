@@ -16,7 +16,7 @@
         placeholder="Search Movies, TV Shows, People"
       />
       <div class="input-group-append">
-        <button class="btn btn-primary" type="button">
+        <button class="btn btn-primary" type="submit" @click.prevent="gotoSearch">
           <i class="fas fa-search fa-sm"></i>
         </button>
       </div>
@@ -39,7 +39,7 @@ export default {
   methods: {
     gotoSearch() {
       if (!this.q.length) return;
-      this.$router.push({ path: 'search', query: { q: this.q } }); //.catch(err => {console.log(err); });
+      this.$router.push({ path: '/search', query: { q: this.q } }); //.catch(err => {console.log(err); });
     },
     initAutocomplete() {
       const inputEl = $('.typeahead');

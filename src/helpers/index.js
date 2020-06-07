@@ -4,13 +4,40 @@ const arraysHelpers = {
     return arr.filter(obj => !uniq[obj.id] && (uniq[obj.id] = true));
   },
   byYear: (a, b) => {
-    const year1 = a.year;
-    const year2 = b.year;
+    // https://eslint.org/docs/rules/no-prototype-builtins
+    const key = Object.prototype.hasOwnProperty.call(a, 'year')
+      ? 'year'
+      : Object.prototype.hasOwnProperty.call(a, 'release_date')
+      ? 'release_date'
+      : Object.prototype.hasOwnProperty.call(a, 'first_air_date')
+      ? 'first_air_date'
+      : console.error(`Object missing property required for sorting`);
+
+    let year1 = a[key];
+    let year2 = b[key];
+
+    // if year is a string e.g 2017-09-12 convert to date timestamp
+    if ((typeof year1 || typeof year2) == 'string') {
+      year1 = dateHelpers.toTimestamp(year1);
+      year2 = dateHelpers.toTimestamp(year2);
+    }
 
     let comparison = 0;
     if (year1 > year2) {
       comparison = -1; // descending order
     } else if (year1 < year2) {
+      comparison = 1;
+    }
+    return comparison;
+  },
+  byPopularity: (a, b) => {
+    const score1 = a.popularity;
+    const score2 = b.popularity;
+
+    let comparison = 0;
+    if (score1 > score2) {
+      comparison = -1; // descending order
+    } else if (score1 < score2) {
       comparison = 1;
     }
     return comparison;
@@ -34,7 +61,7 @@ const textHelpers = {
     return mappings[code];
   },
   capitalize: str => {
-    return str.replace(/\w\S*/g, txt => {
+    return str.replace(/-/g, ' ').replace(/\w\S*/g, txt => {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
   },
