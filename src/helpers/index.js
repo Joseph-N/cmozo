@@ -65,11 +65,13 @@ const textHelpers = {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
   },
+  // https://stackoverflow.com/questions/1053902/how-to-convert-a-title-to-a-url-slug-in-jquery
   toSlug: str =>
     str
       .toLowerCase()
       .replace(/[^\w- ]+/g, '')
       .replace(/ +/g, '-')
+      .replace(/(-)\1+/g, '$1') // remove duplicate ---
 };
 
 const numberHelpers = {
