@@ -19,7 +19,8 @@ export default {
   methods: {
     scrollDiv(direction) {
       let container = document.getElementById(`${this.parent}`);
-      const cardWidth = document.getElementsByClassName('card')[0].offsetWidth;
+      // get width of card
+      const cardWidth = document.querySelectorAll(`#${this.parent} .card`)[0].offsetWidth;
       // how much we scroll. get the container visible width, less width of one
       // card and we also minus 10 (padding between each cards).
       let scrollStep = container.offsetWidth - cardWidth - 10;
