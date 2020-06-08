@@ -45,8 +45,8 @@ const tmdbMovies = {
     const response = await axios.get(`discover/movie?page=${page}&sort_by=popularity.desc`);
     return response.data;
   },
-  async byGenre(genreID) {
-    const response = await axios.get(`genre/${genreID}/movies`);
+  async byGenre(genreID, page) {
+    const response = await axios.get(`genre/${genreID}/movies?page=${page}`);
     return response.data;
   }
 };

@@ -33,8 +33,8 @@ const tmdbTV = {
     const response = await axios.get(`/tv/on_the_air?page=${page}`);
     return response.data;
   },
-  async withGenre(genre_id) {
-    const response = await axios.get(`/discover/tv?with_genres=${genre_id}&sort_by=popularity.desc`);
+  async withGenre(genre_id, page) {
+    const response = await axios.get(`/discover/tv?page=${page}&with_genres=${genre_id}&sort_by=popularity.desc`);
     return response.data;
   },
   async withNetwork(network_id) {
