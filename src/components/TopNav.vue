@@ -25,10 +25,7 @@
           <i class="fas fa-search fa-fw"></i>
         </a>
         <!-- Dropdown - Messages -->
-        <div
-          class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-          aria-labelledby="searchDropdown"
-        >
+        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
           <form class="form-inline mr-auto w-100 navbar-search">
             <div class="input-group">
               <input
@@ -48,6 +45,22 @@
         </div>
       </li>
 
+      <li class="nav-item">
+        <router-link :to="{ name: 'user-movies', params: { user_id: user.uid } }" class="nav-link no-wrap">
+          <span class="mr-2 d-lg-inline text-gray-600 small">
+            My Movies
+          </span>
+        </router-link>
+      </li>
+
+      <li class="nav-item">
+        <router-link :to="{ name: 'user-shows', params: { user_id: user.uid } }" class="nav-link no-wrap">
+          <span class="mr-2 d-lg-inline text-gray-600 small">
+            My Shows
+          </span>
+        </router-link>
+      </li>
+
       <div class="topbar-divider d-none d-sm-block"></div>
 
       <!-- Nav Item - User Information -->
@@ -65,26 +78,8 @@
           <img class="img-profile rounded-circle" :src="user.avator" />
         </a>
         <!-- Dropdown - User Information -->
-        <div
-          class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-          aria-labelledby="userDropdown"
-        >
-          <router-link
-            :to="{ name: 'user-movies', params: { user_id: user.uid } }"
-            class="dropdown-item"
-          >
-            <i class="fas fa-ticket-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-            My Movies
-          </router-link>
-          <router-link
-            :to="{ name: 'user-shows', params: { user_id: user.uid } }"
-            class="dropdown-item"
-          >
-            <i class="fas fa-tv fa-sm fa-fw mr-2 text-gray-400"></i>
-            My Shows
-          </router-link>
-
-          <div class="dropdown-divider"></div>
+        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+          <!-- <div class="dropdown-divider"></div> -->
           <a class="dropdown-item" href="#" @click.prevent="logout">
             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
             Logout

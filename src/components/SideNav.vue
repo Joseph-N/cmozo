@@ -30,41 +30,25 @@
 
     <!-- Nav Item - Tables -->
     <li class="nav-item">
-      <router-link
-        :to="{ name: 'discover' }"
-        class="nav-link"
-        v-bind:class="{ active: currentPage('discover') }"
-      >
+      <router-link :to="{ name: 'discover' }" class="nav-link" v-bind:class="{ active: currentPage('discover') }">
         <i class="fas fa-fw fa-magic"></i>Discover
       </router-link>
     </li>
 
     <li class="nav-item">
-      <router-link
-        :to="{ name: 'trending' }"
-        class="nav-link"
-        v-bind:class="{ active: currentPage('trending') }"
-      >
+      <router-link :to="{ name: 'trending' }" class="nav-link" v-bind:class="{ active: currentPage('trending') }">
         <i class="fas fa-fw fa-chart-line"></i>Trending
       </router-link>
     </li>
 
     <li class="nav-item">
-      <router-link
-        :to="{ name: 'upcoming' }"
-        class="nav-link"
-        v-bind:class="{ active: currentPage('upcoming') }"
-      >
+      <router-link :to="{ name: 'upcoming' }" class="nav-link" v-bind:class="{ active: currentPage('upcoming') }">
         <i class="fas fa-fw fa-broadcast-tower"></i>Upcoming
       </router-link>
     </li>
 
     <li class="nav-item">
-      <router-link
-        :to="{ name: 'now-playing' }"
-        class="nav-link"
-        v-bind:class="{ active: currentPage('NowPlaying') }"
-      >
+      <router-link :to="{ name: 'now-playing' }" class="nav-link" v-bind:class="{ active: currentPage('NowPlaying') }">
         <i class="fas fa-fw fa-glasses"></i>Now Playing
       </router-link>
     </li>
@@ -75,24 +59,26 @@
     <!-- Heading -->
     <div class="sidebar-heading">TV</div>
     <li class="nav-item">
-      <router-link
-        :to="{ name: 'top-rated' }"
-        class="nav-link"
-        v-bind:class="{ active: currentPage('top-rated') }"
-      >
-        <i class="fas fa-fw fa-crown"></i>Top Rated
-      </router-link>
-    </li>
-    <li class="nav-item">
-      <router-link
-        :to="{ name: 'popular' }"
-        class="nav-link"
-        v-bind:class="{ active: currentPage('Popular') }"
-      >
-        <i class="fas fa-fw fa-thumbs-up"></i> Popular
+      <router-link :to="{ name: 'onair' }" class="nav-link" v-bind:class="{ active: currentPage('OnAir') }">
+        <i class="fas fa-fw fa-desktop"></i> On Tv
       </router-link>
     </li>
 
+    <li class="nav-item">
+      <router-link :to="{ name: 'popular' }" class="nav-link" v-bind:class="{ active: currentPage('Popular') }">
+        <i class="fas fa-fw fa-thumbs-up"></i> Popular
+      </router-link>
+    </li>
+    <li class="nav-item">
+      <router-link :to="{ name: 'trending-tv' }" class="nav-link" v-bind:class="{ active: currentPage('trending-tv') }">
+        <i class="fas fa-fw fa-chart-line"></i>Trending
+      </router-link>
+    </li>
+    <li class="nav-item">
+      <router-link :to="{ name: 'top-rated' }" class="nav-link" v-bind:class="{ active: currentPage('top-rated') }">
+        <i class="fas fa-fw fa-crown"></i>Top Rated
+      </router-link>
+    </li>
     <li class="nav-item">
       <router-link
         :to="{ name: 'airing-today' }"
@@ -100,15 +86,6 @@
         v-bind:class="{ active: currentPage('AiringToday') }"
       >
         <i class="fas fa-fw fa-satellite-dish"></i> Airing Today
-      </router-link>
-    </li>
-    <li class="nav-item">
-      <router-link
-        :to="{ name: 'onair' }"
-        class="nav-link"
-        v-bind:class="{ active: currentPage('OnAir') }"
-      >
-        <i class="fas fa-fw fa-desktop"></i> On Tv
       </router-link>
     </li>
 

@@ -1,8 +1,8 @@
 import axios from '../axios';
 
 const tmdbTV = {
-  async topRated() {
-    const response = await axios.get('/tv/top_rated');
+  async topRated(page) {
+    const response = await axios.get(`/tv/top_rated?page=${page}`);
     return response.data;
   },
   async get(id) {
@@ -13,20 +13,24 @@ const tmdbTV = {
     const response = await axios.get(`/tv/${show_id}/season/${season_num}`);
     return response.data;
   },
-  async popular() {
-    const response = await axios.get('/tv/popular');
+  async popular(page) {
+    const response = await axios.get(`/tv/popular?page=${page}`);
     return response.data;
   },
   async similar(show_id) {
     const response = await axios.get(`/tv/${show_id}/similar`);
     return response.data;
   },
-  async latest() {
-    const response = await axios.get('/tv/airing_today');
+  async trending(page) {
+    const response = await axios.get(`trending/tv/week?page=${page}`);
     return response.data;
   },
-  async onair() {
-    const response = await axios.get('/tv/on_the_air');
+  async airing_today(page) {
+    const response = await axios.get(`/tv/airing_today?page=${page}`);
+    return response.data;
+  },
+  async onair(page) {
+    const response = await axios.get(`/tv/on_the_air?page=${page}`);
     return response.data;
   },
   async withGenre(genre_id) {

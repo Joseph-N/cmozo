@@ -67,6 +67,11 @@ const routes = [
     component: () => import('../views/shows/Popular.vue')
   },
   {
+    path: '/shows/trending',
+    name: 'trending-tv',
+    component: () => import('../views/shows/Trending.vue')
+  },
+  {
     path: '/shows/airing-today',
     name: 'airing-today',
     component: () => import('../views/shows/AiringToday.vue')

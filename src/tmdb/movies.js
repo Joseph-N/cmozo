@@ -25,24 +25,24 @@ const tmdbMovies = {
     const response = await axios.get(`movie/${movie_id}/videos`);
     return response.data;
   },
-  async trending() {
-    const response = await axios.get('trending/movie/week');
+  async trending(page) {
+    const response = await axios.get(`trending/movie/week?page=${page}`);
     return response.data;
   },
   async similar(movie_id) {
     const response = await axios.get(`movie/${movie_id}/similar`);
     return response.data;
   },
-  async upcoming() {
-    const response = await axios.get('movie/upcoming');
+  async upcoming(page) {
+    const response = await axios.get(`movie/upcoming?page=${page}`);
     return response.data;
   },
-  async nowPlaying() {
-    const response = await axios.get('movie/now_playing');
+  async nowPlaying(page) {
+    const response = await axios.get(`movie/now_playing?page=${page}`);
     return response.data;
   },
-  async discover() {
-    const response = await axios.get('discover/movie?sort_by=popularity.desc');
+  async discover(page) {
+    const response = await axios.get(`discover/movie?page=${page}&sort_by=popularity.desc`);
     return response.data;
   },
   async byGenre(genreID) {

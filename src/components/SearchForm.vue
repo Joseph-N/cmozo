@@ -1,5 +1,5 @@
 <template>
-  <form class="form-inline mr-auto w-100 navbar-search">
+  <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-md-0 w-100 navbar-search">
     <div class="input-group w-50">
       <div class="loading" v-if="searching">
         <div class="rect1"></div>

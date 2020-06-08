@@ -12,26 +12,44 @@
       </div>
     </div>
     <Previews :collection="cleanedResults" :type="collection_type" layout="multi" />
+    <pagination :page="current_page" :pages="total_pages" v-on:page-change="pageChanged"></pagination>
   </div>
 </template>
 
 <script>
 import { tmdbTV } from '../../tmdb';
 import Previews from '../../components/Previews';
+import Pagination from '@/components/Pagination';
+import { scrollMixin } from '@/mixins';
 
 export default {
   name: 'Popular',
   components: {
-    Previews
+    Previews,
+    Pagination
   },
+  mixins: [scrollMixin],
   data() {
     return {
-      results: [],
       collection_type: 'show'
     };
   },
-  mounted() {
-    tmdbTV.popular().then(response => (this.results = response.results));
+  methods: {
+    popularShows(page = 1) {
+      this.loading = true;
+      tmdbTV.popular(page).then(response => {
+        this.current_page = response.page;
+        this.total_pages = response.total_pages;
+        this.results = [...this.results, ...response.results];
+        this.loading = false;
+      });
+    },
+    pageChanged(page) {
+      this.popularShows(page);
+    }
+  },
+  created() {
+    this.popularShows();
   },
   computed: {
     cleanedResults: function() {

@@ -3,7 +3,7 @@
     <div
       class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
     >
-      <h1 class="h2">Top Rated</h1>
+      <h1 class="h2">Trending</h1>
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
           <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -35,9 +35,9 @@ export default {
     };
   },
   methods: {
-    getTopRated(page) {
+    trendingShows(page = 1) {
       this.loading = true;
-      tmdbTV.topRated(page).then(response => {
+      tmdbTV.trending(page).then(response => {
         this.current_page = response.page;
         this.total_pages = response.total_pages;
         this.results = [...this.results, ...response.results];
@@ -45,11 +45,11 @@ export default {
       });
     },
     pageChanged(page) {
-      this.getTopRated(page);
+      this.trendingShows(page);
     }
   },
   created() {
-    this.getTopRated();
+    this.trendingShows();
   },
   computed: {
     cleanedResults: function() {
