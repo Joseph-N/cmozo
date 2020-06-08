@@ -8,7 +8,7 @@
         </small>
       </h4>
       <Previews
-        :collection="userMovies.slice(0,10)"
+        :collection="userMovies.slice(0,20)"
         type="movie"
         layout="single"
         v-if="userMovies.length"
@@ -24,7 +24,7 @@
         </small>
       </h4>
       <Previews
-        :collection="userShows.slice(0,10)"
+        :collection="userShows.slice(0,20)"
         type="show"
         layout="single"
         hasMore

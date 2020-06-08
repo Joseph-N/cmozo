@@ -71,7 +71,7 @@ const textHelpers = {
       .toLowerCase()
       .replace(/[^\w- ]+/g, '')
       .replace(/ +/g, '-')
-      .replace(/(-)\1+/g, '$1') // remove duplicate ---
+      .replace(/(-)\1+/g, '$1') // remove duplicate --
 };
 
 const numberHelpers = {

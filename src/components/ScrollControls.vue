@@ -3,7 +3,11 @@
     <a href="#" class="btn btn-secondary btn-sm paddle to-left" @click.prevent="scrollDiv('left')">
       <i class="fas fa-arrow-left"></i>
     </a>
-    <a href="#" class="btn btn-secondary btn-sm paddle to-right" @click.prevent="scrollDiv('right')">
+    <a
+      href="#"
+      class="btn btn-secondary btn-sm paddle to-right"
+      @click.prevent="scrollDiv('right')"
+    >
       <i class="fas fa-arrow-right"></i>
     </a>
   </div>
@@ -14,8 +18,11 @@ export default {
   props: ['parent'],
   methods: {
     scrollDiv(direction) {
-      let container = document.getElementById(`${this.parent}`),
-        scrollStep = 450;
+      let container = document.getElementById(`${this.parent}`);
+      const cardWidth = document.getElementsByClassName('card')[0].offsetWidth;
+      // how much we scroll. get the container visible width, less width of one
+      // card and we also minus 10 (padding between each cards).
+      let scrollStep = container.offsetWidth - cardWidth - 10;
       let sl = container.scrollLeft,
         cw = container.scrollWidth;
 
