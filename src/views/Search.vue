@@ -12,51 +12,64 @@
       </div>
     </div>
     <Previews :collection="cleanedResults" :type="collection_type" layout="multi" />
+    <pagination :page="current_page" :pages="total_pages" v-on:page-change="pageChanged" v-show="false"></pagination>
+    <div class="text-center p-5 mb-3" v-show="loading">
+      <img src="@/assets/images/loading.gif" alt="" />
+    </div>
   </div>
 </template>
 <script>
 import { tmdbMovies } from '@/tmdb';
 import Previews from '@/components/Previews';
-import { arraysHelpers } from '../helpers';
+// import { arraysHelpers } from '../helpers';
+import Pagination from '@/components/Pagination';
+import { scrollMixin } from '@/mixins';
 
 export default {
   name: 'Search',
   components: {
-    Previews
+    Previews,
+    Pagination
   },
+  mixins: [scrollMixin],
   data() {
     return {
       query: null,
-      results: [],
       collection_type: 'movie'
     };
   },
   methods: {
-    searchMovie() {
+    searchMovie(page = 1) {
       this.query = this.$route.query.q;
       if (!this.query) return;
-      tmdbMovies.search(this.query).then(response => {
-        this.total_results = response.total_results;
-        this.results = response.results;
+      this.loading = true;
+      tmdbMovies.search(this.query, page).then(response => {
+        this.current_page = response.page;
+        this.total_pages = response.total_pages;
+        this.results = [...this.results, ...response.results];
+        this.loading = false;
       });
+    },
+    searchShow() {},
+    pageChanged(page) {
+      this.searchMovie(page);
     }
   },
   computed: {
     cleanedResults: function() {
-      return this.results
-        .concat()
-        .filter(result => !!result.poster_path)
-        .sort(arraysHelpers.byYear);
+      return this.results.concat().filter(result => !!result.poster_path);
+      //.sort(arraysHelpers.byYear);
     },
     queryResultsCount() {
-      return this.results.filter(result => !!result.poster_path).length;
+      return this.cleanedResults.length;
     }
   },
   created() {
     this.searchMovie();
   },
   watch: {
-    $route() {
+    '$route.query.q': function() {
+      this.results = [];
       this.searchMovie();
     }
   }

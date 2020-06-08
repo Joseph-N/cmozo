@@ -9,8 +9,8 @@ const tmdbMovies = {
     const response = await axios.get('genre/movie/list');
     return response.data;
   },
-  async search(query) {
-    const response = await axios.get(`search/movie?query=${query}`);
+  async search(query, page, adult = true) {
+    const response = await axios.get(`search/movie?page=${page}&query=${query}&include_adult=${adult}`);
     return response.data;
   },
   async get(id) {
