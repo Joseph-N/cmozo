@@ -17,8 +17,8 @@ const tmdbTV = {
     const response = await axios.get(`/tv/popular?page=${page}`);
     return response.data;
   },
-  async similar(show_id) {
-    const response = await axios.get(`/tv/${show_id}/similar`);
+  async similar(show_id, page) {
+    const response = await axios.get(`/tv/${show_id}/similar?page=${page}`);
     return response.data;
   },
   async trending(page) {

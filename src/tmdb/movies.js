@@ -29,8 +29,8 @@ const tmdbMovies = {
     const response = await axios.get(`trending/movie/week?page=${page}`);
     return response.data;
   },
-  async similar(movie_id) {
-    const response = await axios.get(`movie/${movie_id}/similar`);
+  async similar(movie_id, page) {
+    const response = await axios.get(`movie/${movie_id}/similar?page=${page}`);
     return response.data;
   },
   async upcoming(page) {

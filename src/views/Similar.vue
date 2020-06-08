@@ -12,6 +12,10 @@
       </div>
     </div>
     <Previews :collection="cleanedResults" :type="type" layout="multi" />
+    <pagination :page="current_page" :pages="total_pages" v-on:page-change="pageChanged" v-show="false"></pagination>
+    <div class="text-center p-5 mb-3" v-show="loading">
+      <img src="@/assets/images/loading.gif" alt="" />
+    </div>
   </div>
 </template>
 
@@ -19,35 +23,47 @@
 import { tmdbMovies, tmdbTV } from '@/tmdb';
 import { arraysHelpers, textHelpers } from '../helpers';
 import Previews from '@/components/Previews';
+import Pagination from '@/components/Pagination';
+import { scrollMixin } from '@/mixins';
 
 export default {
   name: 'Similar',
   components: {
-    Previews
+    Previews,
+    Pagination
   },
   props: {
     type: String
   },
-  data() {
-    return {
-      results: []
-    };
-  },
+  mixins: [scrollMixin],
   methods: {
-    similarMovies(movie_id) {
-      tmdbMovies.similar(movie_id).then(response => {
-        this.results = response.results;
+    getSimilar(page = 1) {
+      this.loading = true;
+      const id = this.$route.params.id;
+      this.type == 'movie' ? this.similarMovies(id, page) : this.similarShows(id, page);
+    },
+    similarMovies(movie_id, page) {
+      tmdbMovies.similar(movie_id, page).then(response => {
+        this.current_page = response.page;
+        this.total_pages = response.total_pages;
+        this.results = [...this.results, ...response.results];
+        this.loading = false;
       });
     },
-    similarShows(show_id) {
-      tmdbTV.similar(show_id).then(response => {
-        this.results = response.results;
+    similarShows(show_id, page) {
+      tmdbTV.similar(show_id, page).then(response => {
+        this.current_page = response.page;
+        this.total_pages = response.total_pages;
+        this.results = [...this.results, ...response.results];
+        this.loading = false;
       });
+    },
+    pageChanged(page) {
+      this.getSimilar(page);
     }
   },
   created() {
-    const id = this.$route.params.id;
-    this.type == 'movie' ? this.similarMovies(id) : this.similarShows(id);
+    this.getSimilar();
   },
   computed: {
     cleanedResults: function() {

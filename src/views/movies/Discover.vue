@@ -2,7 +2,10 @@
   <div>
     <h1 class="h3 mb-4 text-gray-800">Discover</h1>
     <Previews :collection="cleanedResults" :type="collection_type" layout="multi" />
-    <pagination :page="current_page" :pages="total_pages" v-on:page-change="pageChanged"></pagination>
+    <pagination :page="current_page" :pages="total_pages" v-on:page-change="pageChanged" v-show="false"></pagination>
+    <div class="text-center p-5 mb-3" v-show="loading">
+      <img src="@/assets/images/loading.gif" alt="" />
+    </div>
   </div>
 </template>
 
